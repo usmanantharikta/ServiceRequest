@@ -288,6 +288,7 @@
           <input type="hidden" name="nik_request" value="<?php echo $_SESSION['nik'];?>">
           <input type="hidden" name="id_request" >
           <input type="hidden" name="id_task" >
+          <input type="hidden" name="nik_from">
           <div class="form-group">
             <label>PIC</label>
             <div class="input-group ">
@@ -710,6 +711,7 @@ function edit(id_request){
        {
           $(".memo").wysihtml5();
            $('[name="id_request"]').val(data.id_request);
+           $('[name="nik_from"]').val(data.nik_receipt);
            $('[name="id_task"]').val(data.id_task);
            $('[name="nik_receipt"]').val(data.nik_receipt+"-"+data.location+"-"+data.division+"-"+data.department+"-"+data.first_name+" "+data.last_name);
            $('[name="doc_type"]').val(data.doc_type);

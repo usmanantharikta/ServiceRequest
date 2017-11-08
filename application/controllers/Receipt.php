@@ -13,6 +13,7 @@ class Receipt extends CI_Controller {
 		parent::__construct();
 		$this->load->model('receipt_model');
 		$this->load->model('request_model');
+		$this->load->model('manager_model');
 	}
 
   public function index(){
@@ -68,19 +69,26 @@ class Receipt extends CI_Controller {
 		$start_date=$this->input->post('start_date');
 		$finish_date=$this->input->post('finish_date');
 		$update='';
-		if($status=='solved'){
-			// $update=$this->request_model->update_request(array('id_request'=>$id_request), array('status_pic'=>$status, 'finish_date'=>$close_date, 'pic_note'=>$pic_note));
-			$log=$this->receipt_model->save_log(array('request_id'=>$id_request), array('solved_time'=>date('Y-m-d H:i:s')));
-		}elseif ($status=='onprogress') {
-			// $update=$this->request_model->update_request(array('id_request'=>$id_request), array('status_pic'=>$status, 'start_date'=>$close_date, 'pic_note'=>$pic_note));
-			$log=$this->receipt_model->save_log(array('request_id'=>$id_request), array('start_time'=>date('Y-m-d H:i:s')));
-		}elseif ($status=='unsolved') {
-			// $update=$this->request_model->update_request(array('id_request'=>$id_request), array('status_pic'=>$status, 'finish_date'=>$close_date, 'pic_note'=>$pic_note));
-			$log=$this->receipt_model->save_log(array('request_id'=>$id_request), array('unsoved_time'=>date('Y-m-d H:i:s')));
+		//cek apakah itu manager atau bukan
+		$transfer_to=$this->input->post('transfer_to');
+		$nik_from=$this->input->post('nik_from');
+		if($transfer_to!=''){
+			$update=$this->manager_model->change_receipt(array('nik_receipt'=>$transfer_to,'transfer_from'=>$nik_from, 'pic_note'=>$pic_note),array('id_request'=>$id_request));
+			$log=$this->receipt_model->save_log(array('request_id'=>$id_request), array('transfer-time'=>date('Y-m-d H:i:s')));
+		}else{
+			if($status=='solved'){
+				// $update=$this->request_model->update_request(array('id_request'=>$id_request), array('status_pic'=>$status, 'finish_date'=>$close_date, 'pic_note'=>$pic_note));
+				$log=$this->receipt_model->save_log(array('request_id'=>$id_request), array('solved_time'=>date('Y-m-d H:i:s')));
+			}elseif ($status=='onprogress') {
+				// $update=$this->request_model->update_request(array('id_request'=>$id_request), array('status_pic'=>$status, 'start_date'=>$close_date, 'pic_note'=>$pic_note));
+				$log=$this->receipt_model->save_log(array('request_id'=>$id_request), array('start_time'=>date('Y-m-d H:i:s')));
+			}elseif ($status=='unsolved') {
+				// $update=$this->request_model->update_request(array('id_request'=>$id_request), array('status_pic'=>$status, 'finish_date'=>$close_date, 'pic_note'=>$pic_note));
+				$log=$this->receipt_model->save_log(array('request_id'=>$id_request), array('unsoved_time'=>date('Y-m-d H:i:s')));
+			}
+
+			$update=$this->request_model->update_request(array('id_request'=>$id_request), array('status_pic'=>$status,'start_date'=>$start_date, 'finish_date'=>$finish_date, 'pic_note'=>$pic_note));
 		}
-
-		$update=$this->request_model->update_request(array('id_request'=>$id_request), array('status_pic'=>$status,'start_date'=>$start_date, 'finish_date'=>$finish_date, 'pic_note'=>$pic_note));
-
 		echo json_encode(array('status'=>false, 'hasil'=>$update, array('status_user'=>$status, 'close_date'=>$close_date, 'id_request')));
 	}
 

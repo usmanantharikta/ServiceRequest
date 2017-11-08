@@ -66,4 +66,11 @@ class Manager_model extends CI_Model {
       return $query->result_array();
     }
 
+    //change receipt by manager
+    public function change_receipt($data, $where){
+      $this->db->update('request', $data,$where);
+      return $this->db->affected_rows();
+
+    }
+
 }
