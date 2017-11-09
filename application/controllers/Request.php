@@ -214,7 +214,7 @@ class Request extends CI_Controller {
 		$dat=$this->request_model->get_data_byid($id_request);
 		$dep=$this->request_model->get_dept($dat->nik_receipt);
 		$name=$this->request_model->get_name($dat->nik_receipt);
-		$full=$dep."-".$name;
+		$full=$name."-".$dep;
 		$this->data_tempel($dat, $full);
 		// echo json_encode(array('d'=>$data, 'name'=>$full));
 	}

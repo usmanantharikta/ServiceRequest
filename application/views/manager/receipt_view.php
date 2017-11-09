@@ -601,11 +601,13 @@ function show(id_request)
       success: function(data)
       {
         $('#history').html(data.history);
+        $('#modal-timeline').modal('show'); // show bootstrap modal when complete loaded
+
           // $('#order_date').text(data.d.order_date);
           // $('.request').text(data.d.nik_request+"-"+data.d.location+"-"+data.d.division+"-"+data.d.department+"-"+data.d.first_name+" "+data.d.last_name);
           // $('.receipt_name').text(data.d.nik_request+"-"+data.name);
           // $('#detail_task').html("<h5>Detail Request: </h5>"+data.d.task_detail);
-          $('#modal-timeline').modal('show'); // show bootstrap modal when complete loaded
+          // $('#modal-timeline').modal('show'); // show bootstrap modal when complete loaded
           // $('.modal-title').text("Time Line"); // Set title to Bootstrap modal title
           // $('#create_time').html('<i class="fa fa-clock-o"></i> '+data.d.create_time);
           // $('#respon').html('<i class="fa fa-clock-o"></i> '+data.d.start_time);
