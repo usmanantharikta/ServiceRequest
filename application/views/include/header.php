@@ -30,7 +30,7 @@
               <img src="<?php echo base_url().'/assets/dist/img/user2-160x160.jpg'?>" class="img-circle" alt="User Image">
 
               <p>
-                <?php echo $_SESSION['fullname'];?> - Web Developer
+                <?php echo $_SESSION['fullname'];?> - <?php echo $_SESSION['full_div'];?>
               </p>
             </li>
             <!-- Menu Body -->
@@ -54,15 +54,15 @@
                 <a href="#" class="btn btn-default btn-flat">Profile</a>
               </div>
               <div class="pull-right">
-                <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                <a href="<?php echo site_url().'/general/logout'?>" class="btn btn-default btn-flat">Sign out</a>
               </div>
             </li>
           </ul>
         </li>
         <!-- Control Sidebar Toggle Button -->
-        <li>
+        <!-- <li>
           <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
-        </li>
+        </li> -->
       </ul>
     </div>
   </nav>

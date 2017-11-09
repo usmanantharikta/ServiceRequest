@@ -72,5 +72,13 @@ class Manager_model extends CI_Model {
       return $this->db->affected_rows();
 
     }
+  //get pic by division
+  public function getpic_div($div){
+    $this->db->select('*');
+    $this->db->where('division',$div);
+    $this->db->from('employee');
+    $query=$this->db->get();
+    return $query->result_array();
+  }
 
 }

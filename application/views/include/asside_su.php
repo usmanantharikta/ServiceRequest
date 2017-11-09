@@ -29,7 +29,7 @@
       <li class="treeview">
         <a href="#">
           <i class="fa fa-files-o"></i>
-          <span>REQUEST MENU</span>
+          <span>REQUEST</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
           </span>
@@ -43,13 +43,27 @@
       <li class="treeview">
         <a href="#">
           <i class="fa fa-dashboard"></i>
-          <span>RECEIPT MENU</span>
+          <span>RECEIPT</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
           </span>
         </a>
         <ul class="treeview-menu">
           <li id='receipt_menu'><a href="<?php echo site_url().'/superadmin/receipt'?>"><i class="fa fa-circle-o"></i> Receipt Task List</a></li>
+          <!-- <li><a href="../../index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li> -->
+        </ul>
+      </li>
+      <li class="treeview">
+        <a href="#">
+          <i class="fa fa-dashboard"></i>
+          <span>PROFILE</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li id='change'><a href="<?php echo site_url().'/general'?>"><i class="fa fa-circle-o"></i> Change Password</a></li>
+          <li><a href="<?php echo site_url().'/general/logout'?>"><i class="fa fa-circle-o"></i> Sign out</a></li>
           <!-- <li><a href="../../index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li> -->
         </ul>
       </li>

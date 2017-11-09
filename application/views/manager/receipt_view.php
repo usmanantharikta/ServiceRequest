@@ -85,13 +85,13 @@
         <div class="box-body">
           <!-- <?php var_dump($filter_data);?> -->
 <!-- form start -->
-<form  id='filter-form' class="form-horizontal" action="<?php echo site_url().'/receipt'?>" method="post">
+<form  id='filter-form' class="form-horizontal" action="<?php echo site_url().'/manager/receipt'?>" method="post">
   <div class="col-lg-6">
     <div class="form-group">
-      <label for="inputPassword3"  class="col-sm-2 control-label">User name</label>
+      <label for="inputPassword3"  class="col-sm-2 control-label">PIC name</label>
 
       <div class="col-sm-10">
-        <select id='nik' name="nik_request" class="form-control select2" style="width: 100%;">
+        <select id='nik' name="nik_receipt" class="form-control select2" style="width: 100%;">
           <option value=""> Select one Recipient</option>
           <?php
             foreach ($pic as $key ) {
@@ -216,7 +216,7 @@
                 $button='<a class="btn btn-sm btn-primary" title="Edit" onclick="edit('.$key['id_request'].')"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
                 <a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
                 // echo $day->days;
-                if($day->days<4&&$key['status_pic']=='onprogress'){
+                if($day->days<4&&$key['status_pic']=='onprogress'||$day->days<4&&$key['status_pic']==''){
                   $class='warning';
                 }
                 //cek status pic
@@ -235,10 +235,23 @@
                 }
                 echo '
                 <tr class="'.$class.'">
-                <td class="sorting_1">'.$key['nik'].'</td><td>'.$key['full_name'].'</td><td>'.$key['div'].'</td><td>123</td>
-                <td>'.$key['name_pic'].'</td><td>'.$key['div_pic'].'</td><td>'.$key['id_request'].'</td><td>'.$key['title'].'</td><td>'.$key['doc_type'].'</td><td>'.$key['order_date'].'</td>
-                <td>'.$key['deadline'].'</td><td>'.$key['status_pic'].'</td><td>'.$key['start_date'].'</td><td>'.$key['finish_date'].'</td>
-                <td>'.$key['status_user'].'</td><td>'.$key['close_date'].'</td><td>'.$key['transfer_from'].'</td>
+                <td>'.$key['nik'].'</td>
+                <td>'.$key['full_name'].'</td>
+                <td>'.$key['div'].'</td>
+                <td>'.$key['nik_receipt'].'</td>
+                <td>'.$key['name_pic'].'</td>
+                <td>'.$key['div_pic'].'</td>
+                <td>'.$key['id_request'].'</td>
+                <td>'.$key['title'].'</td>
+                <td>'.$key['doc_type'].'</td>
+                <td>'.$key['order_date'].'</td>
+                <td>'.$key['deadline'].'</td>
+                <td>'.$key['status_pic'].'</td>
+                <td>'.$key['start_date'].'</td>
+                <td>'.$key['finish_date'].'</td>
+                <td>'.$key['status_user'].'</td>
+                <td>'.$key['close_date'].'</td>
+                <td>'.$key['transfer_from'].'</td>
                 <td>'.$button.'</td>
                 </tr>';
               }
@@ -352,7 +365,7 @@
             <select id='nik' name="transfer_to" class="form-control select2" style="width: 100%;">
               <option value=""> Select one </option>
               <?php
-                foreach ($pic as $key ) {
+                foreach ($pic_div as $key ) {
                   // if($_SESSION['nik']==$key['nik'])
                     // continue;
                   echo '<option value="'.$key['nik'].'">'.$key['nik'].'-'.$key['location'].'-'.$key['division'].'-'.$key['department'].'-'.$key['first_name'].' '.$key['last_name'].'</option>';
@@ -673,7 +686,9 @@ $(document).ready(function(){
   $("#receipt_menu").parent().parent().addClass('active menu-open');
   // parent().parent().addClass('active');
   var url='<?php echo site_url().'/request/get_all_request/'.$_SESSION['nik']?>';
-  table = $('#table_report').DataTable();
+  table = $('#table_report').DataTable({
+    "order":[[3, 'asc']]
+  });
 
   $('[name="status_pic"]').val('<?php echo $filter['r.status_pic']?>');
   $('[name="status_user"]').val('<?php echo $filter['r.status_user']?>');

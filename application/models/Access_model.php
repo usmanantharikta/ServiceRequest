@@ -24,6 +24,7 @@ class Access_model extends CI_Model {
               'fullname'=> $this->getname($result[0]['nik']),
               'level'=>$result[0]['level'],
               'division'=>$result[0]['division'],
+              'full_div'=>$result[0]['nik'].' - '.$result[0]['location'].' - '.$result[0]['division'].' - '.$result[0]['department'],
             );
             $this->session->set_userdata($sessiondata);
             return 2; //password benar
@@ -43,6 +44,12 @@ class Access_model extends CI_Model {
       $query=$this->db->get();
       $data=$query->result_array();
       return $data[0]['first_name']." ".$data[0]['last_name'];
+    }
+
+    public function update_password($where, $data){
+      $this->db->update('user',$data, $where);
+      return $this->db->affected_rows();
+
     }
 
 }

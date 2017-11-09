@@ -37,7 +37,7 @@
 <!-- the fixed layout is not compatible with sidebar-mini -->
 <body class="hold-transition skin-blue fixed sidebar-mini">
   <?php
-  if(isset($_SESSION['username'])&&$_SESSION['level']=='manager'){
+  if(isset($_SESSION['username'])&&$_SESSION['level']=='directur'){
 
 ?>
 <!-- Site wrapper -->
@@ -47,7 +47,7 @@
   <?php $this->load->view('include/header');?>
   <!-- =============================================== -->
   <!-- load asside  -->
-  <?php $this->load->view('include/asside_gm')?>
+  <?php $this->load->view('include/asside_su')?>
   <!-- =============================================== -->
 
   <!-- Content Wrapper. Contains page content -->
@@ -85,13 +85,13 @@
         <div class="box-body">
           <!-- <?php var_dump($filter_data);?> -->
 <!-- form start -->
-<form  id='filter-form' class="form-horizontal" action="<?php echo site_url().'/manager'?>" method="post">
+<form  id='filter-form' class="form-horizontal" action="<?php echo site_url().'/receipt'?>" method="post">
   <div class="col-lg-6">
     <div class="form-group">
-      <label for="inputPassword3"  class="col-sm-2 control-label">PIC Name</label>
+      <label for="inputPassword3"  class="col-sm-2 control-label">User name</label>
 
       <div class="col-sm-10">
-        <select id='nik' name="nik_receipt" class="form-control select2" style="width: 100%;">
+        <select id='nik' name="nik_request" class="form-control select2" style="width: 100%;">
           <option value=""> Select one Recipient</option>
           <?php
             foreach ($pic as $key ) {
@@ -134,7 +134,7 @@
         <select name="status_user" class="form-control" style="width: 100%;">
           <option value="">Select One</option>
           <option value="OPEN">OPEN</option>
-          <option value="CANCEL">CANCEL</option>
+          <option value="CANCEL">SOLVED</option>
           <option value="CLOSE">CLOSE</option>
         </select>
       </div>
@@ -216,9 +216,6 @@
                 $button='<a class="btn btn-sm btn-primary" title="Edit" onclick="edit('.$key['id_request'].')"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
                 <a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
                 // echo $day->days;
-                if($_SESSION['nik']!=$key['nik']){
-                  $button='<a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
-                }
                 if($day->days<4&&$key['status_pic']=='onprogress'){
                   $class='warning';
                 }
@@ -230,7 +227,7 @@
                   $class='danger';
                 }
                 elseif($key['status_user']=='CANCEL'){
-                  $class='warning';
+                  $class='success';
                   $button='<a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
                 }
                 else{
@@ -278,7 +275,7 @@
 
 <!-- modal edit -->
 <div class="modal fade" id="modal-default">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -329,8 +326,8 @@
           <!-- /.form-group -->
           <div class="form-group">
             <label>Task Detail</label>
-            <textarea class="memo" name="task_detail" placeholder="Place some text here"
-                      style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+            <textarea disabled class="memo" id="memo" name="task_detail" placeholder="Place some text here"
+                      style="width: 100%; height: 150px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
           </div>
           <!-- /.form-group -->
           <!-- Date -->
@@ -346,27 +343,57 @@
           </div>
           <!-- /.form group -->
           <div class="form-group">
-            <label class="text-danger">Status</label>
+            <label>Status</label>
             <div class="input-group ">
               <div class="input-group-addon">
                 <i class="fa fa-clock-o"></i>
               </div>
-              <select name="status_user" class="form-control select2" style="width: 100%;">
-                <option value="OPEN">OPEN</option>
-                <option value="CANCEL">CANCEL</option>
-                <option value="CLOSE">CLOSE</option>
+              <select name="status_pic" class="form-control select2" style="width: 100%;">
+                <option value="onprogress">ONPROGRESS</option>
+                <option value="solved">SOLVED</option>
+                <option value="unsolved">UNSOLVED</option>
               </select>
             </div>
             <!-- /.input group -->
           </div>
           <!-- /.form group -->
+          <!-- Date -->
+          <div class="form-group">
+            <label>Start Date</label>
+            <div class="input-group date">
+              <div class="input-group-addon">
+                <i class="fa fa-calendar"></i>
+              </div>
+              <input name="start_date" type="text" placeholder="Start date" class="form-control pull-right datepicker">
+            </div>
+            <!-- /.input group -->
+          </div>
+          <!-- /.form group -->
+          <!-- Date -->
+          <div class="form-group">
+            <label>Finish Date</label>
+            <div class="input-group date">
+              <div class="input-group-addon">
+                <i class="fa fa-calendar"></i>
+              </div>
+              <input name="finish_date" type="text" placeholder="Finish date" class="form-control pull-right datepicker">
+            </div>
+            <!-- /.input group -->
+          </div>
+          <!-- /.form group -->
+          <div class="form-group">
+            <label>Note</label>
+            <textarea class="memo" name="pic_note" placeholder="Place some text here"
+                      style="width: 100%; height: 150px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+          </div>
+          <!-- /.form-group -->
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
         <button type="button" onclick="save_edit()" class="btn btn-primary">Save changes</button>
       </div>
-    </div>
+    </div>hanya tes saja
     <!-- /.modal-content -->
   </div>
   <!-- /.modal-dialog -->
@@ -622,8 +649,8 @@
 var table;
 
 $(document).ready(function(){
-  $("#list").addClass('active');
-  $("#list").parent().parent().addClass('active menu-open');
+  $("#receipt_menu").addClass('active');
+  $("#receipt_menu").parent().parent().addClass('active menu-open');
   // parent().parent().addClass('active');
   var url='<?php echo site_url().'/request/get_all_request/'.$_SESSION['nik']?>';
   table = $('#table_report').DataTable();
@@ -689,7 +716,7 @@ function save_edit()
         $('.form-group').removeClass('has-error'); // clear error class
         $('.help-block').empty(); // clear error string
            $.ajax({
-               url : '<?php echo site_url('/request/save_edit') ?>',
+               url : '<?php echo site_url('/receipt/save_edit') ?>',
                type: "POST",
                data: formdata,
                processData: false,

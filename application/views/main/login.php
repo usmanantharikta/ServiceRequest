@@ -133,11 +133,11 @@
                   {
                     // alert('sucsess login');
                     if(data.level=='directur'){
-                      window.location.href = 'index.php/superadmin';
+                      window.location.href = '<?php echo site_url().'/superadmin'?>';
                     }else if (data.level=='manager') {
-                      window.location.href = 'index.php/manager';
+                      window.location.href = '<?php echo site_url().'/manager'?>';
                     }else{
-                      window.location.href = 'index.php/request';
+                      window.location.href = '<?php echo site_url().'/request'?>';
                     }
                   }
                   else

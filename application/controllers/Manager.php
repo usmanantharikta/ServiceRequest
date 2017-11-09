@@ -77,7 +77,7 @@ class Manager extends CI_Controller {
 
 	public function receipt(){
 		$filter_data=array(
-			'r.nik_request'=>$this->input->post('nik_request'),
+			'r.nik_receipt'=>$this->input->post('nik_receipt'),
 			'r.id_request'=>$this->input->post('id_request'),
 			't.title'=>$this->input->post('title'),
 			't.deadline'=>$this->input->post('deadline'),
@@ -112,6 +112,9 @@ class Manager extends CI_Controller {
 
 		$pic=$this->request_model->getpic();
 		$data['pic']=$pic;
+
+		$pic_div=$this->manager_model->getpic_div($this->session->userdata('division'));
+		$data['pic_div']=$pic_div;
 
 		$data['list']=$new_data;
 		$data['filter']=$filter_data;
