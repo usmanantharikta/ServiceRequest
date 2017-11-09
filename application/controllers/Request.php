@@ -211,12 +211,250 @@ class Request extends CI_Controller {
 
 	public function ajax_show($id_request)
 	{
-		$data=$this->request_model->get_data_byid($id_request);
-		$dep=$this->request_model->get_dept($data->nik_receipt);
-		$name=$this->request_model->get_name($data->nik_receipt);
+		$dat=$this->request_model->get_data_byid($id_request);
+		$dep=$this->request_model->get_dept($dat->nik_receipt);
+		$name=$this->request_model->get_name($dat->nik_receipt);
 		$full=$dep."-".$name;
-		echo json_encode(array('d'=>$data, 'name'=>$full));
+		$this->data_tempel($dat, $full);
+		// echo json_encode(array('d'=>$data, 'name'=>$full));
+	}
 
+	private function data_tempel($data, $full){
+		// was create
+		$name_req=$data->first_name.' '.$data->last_name.'-'.$data->location.'-'.$data->division.'-'.$data->department;
+		$time=strtotime($data->create_time);
+		// echo date('h:i:s', $time);
+
+		$time_line='
+		<li class="time-label">
+					<span class="order_date bg-red">';
+		$time_line.=$data->order_date;
+		$time_line.='</span>
+		</li>
+		<!-- ./end order -->
+		<!-- deatil request -->
+		<li>
+			<i class="fa fa-envelope bg-blue"></i>
+			<div class="timeline-item">
+				<span id="create_time" class="time">';
+		$time_line.=date('h:i:s', $time);
+		$time_line.='</span>
+				<h3 class="timeline-header"><a class="request_name" href="#">';
+		$time_line.=$name_req;
+		$time_line.='</a> create a request</h3>
+				<div id="detail_task" class="timeline-body">
+					<h4>Detail Request </h4>';
+		$time_line.=$data->task_detail;
+		$time_line.='</div>
+				<div class="timeline-footer">
+				</div>
+			</div>
+		</li>
+		<!-- end detail request-->
+		<!-- status user -->
+		<li>
+			<i class="fa fa-bell bg-aqua"></i>
+			<div class="timeline-item">
+				<!-- <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span> -->
+				<h3 class="timeline-header no-border">Status User is <a class="text-green" href="#">OPEN</a></h3>
+			</div>
+		</li>
+		<!-- END timeline item -->
+		<!-- timeline item -->
+		<li>
+			<i class="fa fa-hourglass-o bg-yellow"></i>
+			<div class="timeline-item">
+				<!-- <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span> -->
+				<h3 class="timeline-header no-border">Request is Send to  <a class="receipt_name" class="text-green" href="#">';
+		$time_line.=$full.'nitip';
+		$time_line.='</a></h3>
+			</div>
+		</li>
+		';
+		// var_dump($data);
+			if($data->start_time!="0000-00-00 00:00:00"){
+
+				$time_line.='
+				<!-- recipient accept ________________________________________________________________________________________ -->
+				<li class="time-label">
+							<span id="start_date" class="bg-green">';
+				$time_line.=date('Y-m-d', strtotime($data->start_time));
+				$time_line.='
+							</span>
+				</li>
+				<!-- /.timeline-label -->
+				<!-- timeline item -->
+				<li class="acc">
+					<i class="fa fa-camera bg-purple"></i>
+					<div class="timeline-item">
+						<span id="respon" class="time"><i class="fa fa-clock-o"></i>';
+				$time_line.=date('h:i:s', strtotime($data->start_time));
+				$time_line.='</span>
+<h3 class="timeline-header"><a class="receipt_name" href="#">';
+				$time_line.=$full;
+				$time_line.='</a> Change Status PIC to On Process</h3>
+						<div id="start_detail" class="timeline-body"> This task will start at '.$data->start_date.'<p>PIC note :</p>';
+				$time_line.=$data->pic_note;
+				$time_line.='
+						</div>
+					</div>
+				</li>
+				<!-- END timeline item -->
+				<!-- timeline item -->
+				<li >
+					<i class="fa fa-bell bg-aqua"></i>
+					<div class="timeline-item">
+						<!-- <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span> -->
+						<h3 class="timeline-header no-border">Status PIC is ';
+				$time_line.='<a class="text-green">ONPROCESS</a>';
+				$time_line.='</h3>
+					</div>
+				</li>
+				<!-- END timeline item -->';
+		}
+
+		if($data->solved_time!="0000-00-00 00:00:00"){
+			$time_line.='
+			<li class=" time-label">
+			       <span id="finish_time" class="bg-green">
+			              '.date('Y-m-d',strtotime($data->solved_time)).'
+			                </span>
+			          </li>
+			          <!-- /.timeline-label -->
+			          <!-- timeline item -->
+			          <li class=" solved">
+			            <i class="fa fa-camera bg-purple"></i>
+
+			            <div class="timeline-item">
+			              <span id="finish_time_jam" class="time"><i class="fa fa-clock-o"></i>'.date('h:i:s',strtotime($data->solved_time)).	'</span>
+			              <h3 class="timeline-header"><a class="receipt_name" href="#">'.$full.'</a> Change Status PIC to Solved</h3>
+			              <div id="finish-detail" class="timeline-body">
+										<p>PIC Note :</p>
+										'.$data->pic_note.'
+			              </div>
+			            </div>
+			          </li>
+			          <!-- END timeline item -->
+			          <!-- timeline item -->
+			          <li>
+			            <i class="fa fa-bell bg-aqua"></i>
+
+			            <div class="timeline-item">
+			              <!-- <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span> -->
+			              <h3 class="timeline-header no-border">Status User is <a class="text-green">SOLVED </a> </h3>
+			            </div>
+			          </li>
+			          <!-- END timeline item -->';
+		}
+
+		//if un solved
+		if($data->unsoved_time!="0000-00-00 00:00:00"){
+			$time_line.='
+						<li class=" time-label">
+						       <span id="finish_time" class="bg-green">
+						              '.date('Y-m-d',strtotime($data->unsoved_time)).'
+						                </span>
+						          </li>
+						          <!-- /.timeline-label -->
+						          <!-- timeline item -->
+						          <li class=" solved">
+						            <i class="fa fa-cross bg-red"></i>
+
+						            <div class="timeline-item">
+						              <span id="finish_time_jam" class="time"><i class="fa fa-clock-o"></i>'.date('h:i:s',strtotime($data->unsoved_time)).	'</span>
+						              <h3 class="timeline-header"><a class="receipt_name" href="#">'.$full.'</a> Change Status PIC to Unsolved</h3>
+						              <div id="finish-detail" class="timeline-body">
+													<p>PIC Note :</p>
+													'.$data->pic_note.'
+						              </div>
+						            </div>
+						          </li>
+						          <!-- END timeline item -->
+						          <!-- timeline item -->
+						          <li>
+						            <i class="fa fa-bell bg-aqua"></i>
+
+						            <div class="timeline-item">
+						              <!-- <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span> -->
+						              <h3 class="timeline-header no-border">Status User is <a class="text-danger">UNSOLVED </a> </h3>
+						            </div>
+						          </li>
+						          <!-- END timeline item -->';
+		}
+		//if cancel
+		if($data->cancel_time!="0000-00-00 00:00:00"){
+			$time_line.='
+						<li class=" time-label">
+						       <span id="finish_time" class="bg-green">
+						              '.date('Y-m-d',strtotime($data->cancel_time)).'
+						                </span>
+						          </li>
+						          <!-- /.timeline-label -->
+						          <!-- timeline item -->
+						          <li class=" solved">
+						            <i class="fa fa-cross bg-red"></i>
+
+						            <div class="timeline-item">
+						              <span id="finish_time_jam" class="time"><i class="fa fa-clock-o"></i>'.date('h:i:s',strtotime($data->cancel_time)).	'</span>
+						              <h3 class="timeline-header"><a class="receipt_name" href="#">'.$name_req.'</a> Change Status PIC to CANCEL</h3>
+						              <div id="finish-detail" class="timeline-body">
+													<p>Detail Task :</p>
+													'.$data->task_detail.'
+						              </div>
+						            </div>
+						          </li>
+						          <!-- END timeline item -->
+						          <!-- timeline item -->
+						          <li>
+						            <i class="fa fa-bell bg-aqua"></i>
+
+						            <div class="timeline-item">
+						              <!-- <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span> -->
+						              <h3 class="timeline-header no-border">Status User is <a class="text-danger">CANCEL </a> </h3>
+						            </div>
+						          </li>
+						          <!-- END timeline item -->';
+		}
+		//close condition
+
+		if($data->close_time!="0000-00-00 00:00:00"){
+			$time_line.='
+						<li class=" time-label">
+						       <span id="finish_time" class="bg-green">
+						              '.date('Y-m-d',strtotime($data->close_time)).'
+						                </span>
+						          </li>
+						          <!-- /.timeline-label -->
+						          <!-- timeline item -->
+						          <li class=" solved">
+						            <i class="fa fa-cross bg-red"></i>
+
+						            <div class="timeline-item">
+						              <span id="finish_time_jam" class="time"><i class="fa fa-clock-o"></i>'.date('h:i:s',strtotime($data->close_time)).	'</span>
+						              <h3 class="timeline-header"><a class="receipt_name" href="#">'.$name_req.'</a> Change Status PIC to CLOSE</h3>
+						              <div id="finish-detail" class="timeline-body">
+													<p>Detail Task :</p>
+													'.$data->task_detail.'
+						              </div>
+						            </div>
+						          </li>
+						          <!-- END timeline item -->
+						          <!-- timeline item -->
+						          <li>
+						            <i class="fa fa-bell bg-aqua"></i>
+
+						            <div class="timeline-item">
+						              <!-- <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span> -->
+						              <h3 class="timeline-header no-border">Status User is <a class="text-green">CLOSE </a> </h3>
+						            </div>
+						          </li>
+						          <!-- END timeline item -->';
+		}
+		$time_line.='   <li >
+		            <i class="fa fa-clock-o bg-gray"></i>
+		          </li>';
+
+		echo json_encode(array('history'=>$time_line));
 	}
 
 	public function save_edit(){

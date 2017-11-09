@@ -38,7 +38,18 @@ table th {
   <?php $this->load->view('include/header');?>
   <!-- =============================================== -->
   <!-- load asside  -->
-  <?php $this->load->view('include/asside_su')?>
+  <?php
+  if($_SESSION['level']=='manager'){
+    $this->load->view('include/asside_gm');
+  }
+  elseif ($_SESSION['level']=='directure') {
+    $this->load->view('include/asside_su');
+  }
+  else{
+    $this->load->view('include/asside');
+  }
+
+  ?>
   <!-- =============================================== -->
 
   <!-- Content Wrapper. Contains page content -->
