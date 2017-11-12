@@ -150,8 +150,8 @@ class Request extends CI_Controller {
 				$status_u,
 				$key['close_date'],
 				$key['transfer_from'],
-				'<a class="btn btn-sm btn-primary" title="Edit" onclick="edit('."'".$id_request."'".')"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
-				<a class="btn btn-sm btn-info" title="Edit" onclick="show('."'".$id_request."'".')"><i class="glyphicon glyphicon-pencil"></i> Show More</a>',
+				// '<a class="btn btn-sm btn-primary" title="Edit" onclick="edit('."'".$id_request."'".')"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
+				// <a class="btn btn-sm btn-info" title="Edit" onclick="show('."'".$id_request."'".')"><i class="glyphicon glyphicon-pencil"></i> Show More</a>',
 			));
 		}
 
@@ -234,7 +234,7 @@ class Request extends CI_Controller {
 		<!-- ./end order -->
 		<!-- deatil request -->
 		<li>
-			<i class="fa fa-envelope bg-blue"></i>
+			<i class="fa fa-pencil bg-blue"></i>
 			<div class="timeline-item">
 				<span id="create_time" class="time">';
 		$time_line.=date('h:i:s', $time);
@@ -262,11 +262,11 @@ class Request extends CI_Controller {
 		<!-- END timeline item -->
 		<!-- timeline item -->
 		<li>
-			<i class="fa fa-hourglass-o bg-yellow"></i>
+			<i class="fa fa-send-o bg-yellow"></i>
 			<div class="timeline-item">
 				<!-- <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span> -->
 				<h3 class="timeline-header no-border">Request is Send to  <a class="receipt_name" class="text-green" href="#">';
-		$time_line.=$full.'nitip';
+		$time_line.=$full;
 		$time_line.='</a></h3>
 			</div>
 		</li>
@@ -285,7 +285,7 @@ class Request extends CI_Controller {
 				<!-- /.timeline-label -->
 				<!-- timeline item -->
 				<li class="acc">
-					<i class="fa fa-camera bg-purple"></i>
+					<i class="fa fa-check-circle-o bg-purple"></i>
 					<div class="timeline-item">
 						<span id="respon" class="time"><i class="fa fa-clock-o"></i>';
 				$time_line.=date('h:i:s', strtotime($data->start_time));
@@ -323,7 +323,7 @@ class Request extends CI_Controller {
 			          <!-- /.timeline-label -->
 			          <!-- timeline item -->
 			          <li class=" solved">
-			            <i class="fa fa-camera bg-purple"></i>
+			            <i class="fa fa-check-circle-o bg-purple"></i>
 
 			            <div class="timeline-item">
 			              <span id="finish_time_jam" class="time"><i class="fa fa-clock-o"></i>'.date('h:i:s',strtotime($data->solved_time)).	'</span>
@@ -358,7 +358,7 @@ class Request extends CI_Controller {
 						          <!-- /.timeline-label -->
 						          <!-- timeline item -->
 						          <li class=" solved">
-						            <i class="fa fa-cross bg-red"></i>
+						            <i class="fa fa-times-circle bg-red"></i>
 
 						            <div class="timeline-item">
 						              <span id="finish_time_jam" class="time"><i class="fa fa-clock-o"></i>'.date('h:i:s',strtotime($data->unsoved_time)).	'</span>
@@ -392,7 +392,7 @@ class Request extends CI_Controller {
 						          <!-- /.timeline-label -->
 						          <!-- timeline item -->
 						          <li class=" solved">
-						            <i class="fa fa-cross bg-red"></i>
+						            <i class="fa fa-times-circle bg-red"></i>
 
 						            <div class="timeline-item">
 						              <span id="finish_time_jam" class="time"><i class="fa fa-clock-o"></i>'.date('h:i:s',strtotime($data->cancel_time)).	'</span>
@@ -427,7 +427,7 @@ class Request extends CI_Controller {
 						          <!-- /.timeline-label -->
 						          <!-- timeline item -->
 						          <li class=" solved">
-						            <i class="fa fa-cross bg-red"></i>
+						            <i class="fa fa-minus-circle bg-red"></i>
 
 						            <div class="timeline-item">
 						              <span id="finish_time_jam" class="time"><i class="fa fa-clock-o"></i>'.date('h:i:s',strtotime($data->close_time)).	'</span>
@@ -450,7 +450,7 @@ class Request extends CI_Controller {
 						          </li>
 						          <!-- END timeline item -->';
 		}
-		$time_line.='   <li >
+		$time_line.=' <li >
 		            <i class="fa fa-clock-o bg-gray"></i>
 		          </li>';
 
@@ -460,6 +460,7 @@ class Request extends CI_Controller {
 	public function save_edit(){
 		$id_request=$this->input->post('id_request');
 		$status=$this->input->post('status_user');
+		$task_detail=$this->input->post('task_detail');
 		$close_date=Date('Y-m-d');
 		if($status=='CLOSE'){
 			$log=$this->receipt_model->save_log(array('request_id'=>$id_request), array('close_time'=>date('Y-m-d H:i:s')));

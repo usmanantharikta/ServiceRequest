@@ -57,11 +57,11 @@
       <h1>
         Receipt Task List
       </h1>
-      <ol class="breadcrumb">
+      <!-- <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li><a href="#">Receipt</a></li>
         <li class="active">list</li>
-      </ol>
+      </ol> -->
     </section>
 
     <!-- Main content -->
@@ -154,11 +154,11 @@
     </div>
   </div>
   </form>
-  <div style="border-top: 1px solid #ffffff" class="box-footer">
+  <div style="border-top: 1px solid #ffffff" class="box-">
     <button onclick="reset_fo()" class="btn pull-right btn-warning">Reset</button>
     <button onclick="submit()" class="btn btn-info pull-right">Filter</button>
   </div>
-  <!-- /.box-footer -->
+  <!-- /.box- -->
         </div>
         <!-- /.box-body -->
       </div>
@@ -250,9 +250,9 @@
           </table>
         </div>
         <!-- /.box-body -->
-        <div class="box-footer">
+        <div class="box-">
         </div>
-        <!-- /.box-footer-->
+        <!-- /.box--->
       </div>
       <!-- /.box -->
 
@@ -261,13 +261,8 @@
   </div>
   <!-- /.content-wrapper -->
 
-  <footer class="main-footer">
-    <div class="pull-right hidden-xs">
-      <b>Version</b> 2.4.0
-    </div>
-    <strong>Copyright &copy; 2014-2016 <a href="https://adminlte.io">Almsaeed Studio</a>.</strong> All rights
-    reserved.
-  </footer>
+  <!-- footer on here -->
+  <?php $this->load->view('include/footer')?>
 
   <!-- /.control-sidebar -->
   <!-- Add the sidebar's background. This div must be placed
@@ -415,7 +410,7 @@
       </div>
       <div class="modal-body">
         <!-- The time line -->
-        <ul class="timeline">
+        <ul id="history" class="timeline">
           <!-- timeline time label -->
           <li class="time-label">
                 <span id="order_date" class="bg-red">
@@ -746,96 +741,97 @@ function show(id_request)
       dataType: "JSON",
       success: function(data)
       {
-          $('#order_date').text(data.d.order_date);
-          $('.request').text(data.d.nik_request+"-"+data.d.location+"-"+data.d.division+"-"+data.d.department+"-"+data.d.first_name+" "+data.d.last_name);
-          $('.receipt_name').text(data.d.nik_request+"-"+data.name);
-          $('#detail_task').html("<h5>Detail Request: </h5>"+data.d.task_detail);
+          $('#history').html(data.history);
+          // $('#order_date').text(data.d.order_date);
+          // $('.request').text(data.d.nik_request+"-"+data.d.location+"-"+data.d.division+"-"+data.d.department+"-"+data.d.first_name+" "+data.d.last_name);
+          // $('.receipt_name').text(data.d.nik_request+"-"+data.name);
+          // $('#detail_task').html("<h5>Detail Request: </h5>"+data.d.task_detail);
           $('#modal-timeline').modal('show'); // show bootstrap modal when complete loaded
           $('.modal-title').text("Time Line"); // Set title to Bootstrap modal title
-          $('#create_time').html('<i class="fa fa-clock-o"></i> '+data.d.create_time);
-          $('#respon').html('<i class="fa fa-clock-o"></i> '+data.d.start_time);
-
-          console.log(data.d.start_date);
-          var deadline=moment(data.d.deadline);
-          var start=moment(data.d.start_date);
-
-          //if on process
-          if(data.d.start_time!='0000-00-00 00:00:00'){
-            $('#start_date').text(data.d.start_date).parent().removeClass('hide');
-            $('.acc').removeClass('hide');
-            $('#waiting').removeClass('hide');
-            $("#start_detail").html("Task will start at "+data.d.start_date+"<br> Memo PIC: <br>"+data.d.pic_note);
-            $('#deadline').html("Status PIC is <a class='text-green'> ONPROCESS </a><br>This Task need "+deadline.diff(start, "days")+" days "+"and "+deadline.diff(moment(),"days")+' day remaining to deadline').parent().parent().removeClass('hide');
-          }
-          else{
-            $('#start_date').text(data.d.start_date).parent().addClass('hide');
-            $('.acc').addClass('hide');
-            $('#waiting').addClass('hide');
-            $('#deadline').text("This Task need "+deadline.diff(start, "days")+" days "+"and "+deadline.diff(moment(),"days")+' day remaining to deadline').parent().parent().addClass('hide');
-          }
-
-          //if solved
-          if(data.d.solved_time!='0000-00-00 00:00:00'){
-            $('#waiting').addClass('hide');
-            $('#finish_time').text(data.d.finish_date).parent().removeClass('hide');
-            $('.solved').removeClass('hide');
-            $('#finish_time_jam').html('<i class="fa fa-clock-o"></i> '+data.d.solved_time);
-            $("#finish-detail").text("Task is Finish at "+data.d.finish_date);
-            $('#solved_status').html("Status PIC is <a class='text-green'> SOLVED</a>").parent().parent().removeClass('hide');
-          }
-          else{
-            $('#finish_time').text(data.d.finish_date).parent().addClass('hide');
-            $('.solved').addClass('hide');
-            $('#finish_time').parent().addClass('hide');
-            $('#solved_status').addClass('hide');
-          }
-
-          //if close_date
-          if(data.d.close_time!='0000-00-00 00:00:00'){
-            $('#waiting').addClass('hide');
-            $('#close_time').text(data.d.close_time).parent().removeClass('hide');
-            $('.closee').removeClass('hide');
-            $('#close_time_jam').html('<i class="fa fa-clock-o"></i> '+data.d.close_time);
-            $("#close-detail").text("Task is Close at "+data.d.close_date);
-            $('#close_status').html("Status PIC is <a class='text-green'> CLOSE</a>").parent().parent().removeClass('hide');
-          }
-          else{
-            $('#close_date').text(data.d.close_date).parent().addClass('hide');
-            $('.closee').addClass('hide');
-            $('#close_time').parent().addClass('hide');
-            $('#close_status').parent().parent().addClass('hide');
-          }
-
-          // unsolved
-          if(data.d.unsoved_time!='0000-00-00 00:00:00'){
-            $('#unsolved_date').text(data.d.unsoved_time.substring(0,10)).parent().removeClass('hide');
-            $('.unsolved_detail').removeClass('hide');
-            $('#unsolved_hour').html('<i class="fa fa-clock-o"></i> '+data.d.unsoved_time);
-            $("#unsolved_note").html("Task Unsolved at "+data.d.unsoved_time+"<br> Memo PIC: <br>"+data.d.pic_note)
-            $('#waiting').addClass('hide');
-            $('#unsolved_status').html("Status PIC is <a class='text-danger'> UNSOLVED</a>");
-          }
-          else{
-            $('#unsolved_date').text(data.d.unsolved_date).parent().addClass('hide');
-            $('.unsolved_detail').addClass('hide');
-            $('#unsolved_date').parent().addClass('hide');
-          }
-
-          //cancel
-          if(data.d.cancel_time!='0000-00-00 00:00:00'){
-            $('#cancel_date').text(data.d.cancel_time.substring(0,10)).parent().removeClass('hide');
-            $('.cancel_detail').removeClass('hide');
-            $('#cancel_hour').html('<i class="fa fa-clock-o"></i> '+data.d.cancel_time);
-            $("#cancel_note").html("Task Cancel at "+data.d.cancel_time+"<br> Memo User : <br>"+data.d.task_detail);
-            $('#waiting').addClass('hide');
-            $('#cancel_status').html("Status PIC is <a class='text-danger'> CANCEL</a>").parent().parent().removeClass('hide');
-          }
-          else{
-            $('#cancel_date').text(data.d.cancel_date).parent().addClass('hide');
-            $('.cancel_detail').addClass('hide');
-            $('#cancel_time').parent().addClass('hide');
-            $('#cancel_status').html("Status PIC is <a class='text-danger'> CANCEL</a>").parent().parent().addClass('hide');
-          }
+          // $('#create_time').html('<i class="fa fa-clock-o"></i> '+data.d.create_time);
+          // $('#respon').html('<i class="fa fa-clock-o"></i> '+data.d.start_time);
+          //
+          // console.log(data.d.start_date);
+          // var deadline=moment(data.d.deadline);
+          // var start=moment(data.d.start_date);
+          //
+          // //if on process
+          // if(data.d.start_time!='0000-00-00 00:00:00'){
+          //   $('#start_date').text(data.d.start_date).parent().removeClass('hide');
+          //   $('.acc').removeClass('hide');
+          //   $('#waiting').removeClass('hide');
+          //   $("#start_detail").html("Task will start at "+data.d.start_date+"<br> Memo PIC: <br>"+data.d.pic_note);
+          //   $('#deadline').html("Status PIC is <a class='text-green'> ONPROCESS </a><br>This Task need "+deadline.diff(start, "days")+" days "+"and "+deadline.diff(moment(),"days")+' day remaining to deadline').parent().parent().removeClass('hide');
+          // }
+          // else{
+          //   $('#start_date').text(data.d.start_date).parent().addClass('hide');
+          //   $('.acc').addClass('hide');
+          //   $('#waiting').addClass('hide');
+          //   $('#deadline').text("This Task need "+deadline.diff(start, "days")+" days "+"and "+deadline.diff(moment(),"days")+' day remaining to deadline').parent().parent().addClass('hide');
+          // }
+          //
+          // //if solved
+          // if(data.d.solved_time!='0000-00-00 00:00:00'){
+          //   $('#waiting').addClass('hide');
+          //   $('#finish_time').text(data.d.finish_date).parent().removeClass('hide');
+          //   $('.solved').removeClass('hide');
+          //   $('#finish_time_jam').html('<i class="fa fa-clock-o"></i> '+data.d.solved_time);
+          //   $("#finish-detail").text("Task is Finish at "+data.d.finish_date);
+          //   $('#solved_status').html("Status PIC is <a class='text-green'> SOLVED</a>").parent().parent().removeClass('hide');
+          // }
+          // else{
+          //   $('#finish_time').text(data.d.finish_date).parent().addClass('hide');
+          //   $('.solved').addClass('hide');
+          //   $('#finish_time').parent().addClass('hide');
+          //   $('#solved_status').addClass('hide');
+          // }
+          //
+          // //if close_date
+          // if(data.d.close_time!='0000-00-00 00:00:00'){
+          //   $('#waiting').addClass('hide');
+          //   $('#close_time').text(data.d.close_time).parent().removeClass('hide');
+          //   $('.closee').removeClass('hide');
+          //   $('#close_time_jam').html('<i class="fa fa-clock-o"></i> '+data.d.close_time);
+          //   $("#close-detail").text("Task is Close at "+data.d.close_date);
+          //   $('#close_status').html("Status PIC is <a class='text-green'> CLOSE</a>").parent().parent().removeClass('hide');
+          // }
+          // else{
+          //   $('#close_date').text(data.d.close_date).parent().addClass('hide');
+          //   $('.closee').addClass('hide');
+          //   $('#close_time').parent().addClass('hide');
+          //   $('#close_status').parent().parent().addClass('hide');
+          // }
+          //
+          // // unsolved
+          // if(data.d.unsoved_time!='0000-00-00 00:00:00'){
+          //   $('#unsolved_date').text(data.d.unsoved_time.substring(0,10)).parent().removeClass('hide');
+          //   $('.unsolved_detail').removeClass('hide');
+          //   $('#unsolved_hour').html('<i class="fa fa-clock-o"></i> '+data.d.unsoved_time);
+          //   $("#unsolved_note").html("Task Unsolved at "+data.d.unsoved_time+"<br> Memo PIC: <br>"+data.d.pic_note)
+          //   $('#waiting').addClass('hide');
+          //   $('#unsolved_status').html("Status PIC is <a class='text-danger'> UNSOLVED</a>");
+          // }
+          // else{
+          //   $('#unsolved_date').text(data.d.unsolved_date).parent().addClass('hide');
+          //   $('.unsolved_detail').addClass('hide');
+          //   $('#unsolved_date').parent().addClass('hide');
+          // }
+          //
+          // //cancel
+          // if(data.d.cancel_time!='0000-00-00 00:00:00'){
+          //   $('#cancel_date').text(data.d.cancel_time.substring(0,10)).parent().removeClass('hide');
+          //   $('.cancel_detail').removeClass('hide');
+          //   $('#cancel_hour').html('<i class="fa fa-clock-o"></i> '+data.d.cancel_time);
+          //   $("#cancel_note").html("Task Cancel at "+data.d.cancel_time+"<br> Memo User : <br>"+data.d.task_detail);
+          //   $('#waiting').addClass('hide');
+          //   $('#cancel_status').html("Status PIC is <a class='text-danger'> CANCEL</a>").parent().parent().removeClass('hide');
+          // }
+          // else{
+          //   $('#cancel_date').text(data.d.cancel_date).parent().addClass('hide');
+          //   $('.cancel_detail').addClass('hide');
+          //   $('#cancel_time').parent().addClass('hide');
+          //   $('#cancel_status').html("Status PIC is <a class='text-danger'> CANCEL</a>").parent().parent().addClass('hide');
+          // }
 
 
 

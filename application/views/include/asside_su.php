@@ -28,7 +28,7 @@
       <li style="text-align:center" class="header">MAIN MENU</li>
       <li class="treeview">
         <a href="#">
-          <i class="fa fa-files-o"></i>
+          <i class="fa fa-envelope-o"></i>
           <span>REQUEST</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
@@ -42,7 +42,7 @@
       </li>
       <li class="treeview">
         <a href="#">
-          <i class="fa fa-dashboard"></i>
+          <i class="fa fa-inbox"></i>
           <span>RECEIPT</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
@@ -55,7 +55,7 @@
       </li>
       <li class="treeview">
         <a href="#">
-          <i class="fa fa-dashboard"></i>
+          <i class="fa fa-user-circle-o"></i>
           <span>PROFILE</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>

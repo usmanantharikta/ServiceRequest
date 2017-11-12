@@ -28,7 +28,7 @@ class Superadmin extends CI_Controller {
 	public function index()
 	{
 		$filter_data=array(
-			'r.nik_receipt'=>$this->input->post('nik_receipt'),
+			'r.nik_request'=>$this->input->post('nik_request'),
 			'r.id_request'=>$this->input->post('id_request'),
 			't.title'=>$this->input->post('title'),
 			't.deadline'=>$this->input->post('deadline'),

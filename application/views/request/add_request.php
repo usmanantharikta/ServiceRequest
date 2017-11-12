@@ -48,11 +48,11 @@ table th {
       <h1>
         Add New Request
       </h1>
-      <ol class="breadcrumb">
+      <!-- <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li><a href="#">service request</a></li>
         <li class="active">add</li>
-      </ol>
+      </ol> -->
     </section>
 
     <!-- Main content -->
@@ -232,13 +232,8 @@ table th {
   </div>
   <!-- /.content-wrapper -->
 
-  <footer class="main-footer">
-    <div class="pull-right hidden-xs">
-      <b>Version</b> 2.4.0
-    </div>
-    <strong>Copyright &copy; 2017 <a href="https://adminlte.io">Maju Bersama</a>.</strong> All rights
-    reserved.
-  </footer>
+  <!-- footer on here -->
+  <?php $this->load->view('include/footer')?>
 
   <!-- Add the sidebar's background. This div must be placed
        immediately after the control sidebar -->

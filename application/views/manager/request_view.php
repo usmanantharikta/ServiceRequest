@@ -57,11 +57,11 @@
       <h1>
         Receipt Task List
       </h1>
-      <ol class="breadcrumb">
+      <!-- <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li><a href="#">Receipt</a></li>
         <li class="active">list</li>
-      </ol>
+      </ol> -->
     </section>
 
     <!-- Main content -->
@@ -274,13 +274,8 @@
   </div>
   <!-- /.content-wrapper -->
 
-  <footer class="main-footer">
-    <div class="pull-right hidden-xs">
-      <b>Version</b> 2.4.0
-    </div>
-    <strong>Copyright &copy; 2014-2016 <a href="https://adminlte.io">Almsaeed Studio</a>.</strong> All rights
-    reserved.
-  </footer>
+  <!-- footer on here -->
+  <?php $this->load->view('include/footer')?>
 
   <!-- /.control-sidebar -->
   <!-- Add the sidebar's background. This div must be placed
@@ -310,7 +305,7 @@
               <div class="input-group-addon">
                 <i class="fa fa-user"></i>
               </div>
-            <input disabled id='nik' name="nik_receipt" class="form-control select2" style="width: 100%;">
+            <input disabled id='nik' name="nik_receipt" class="form-control" style="width: 100%;">
           </div>
           </div>
           <!-- /.form-group -->
@@ -342,7 +337,7 @@
           <!-- /.form-group -->
           <div class="form-group">
             <label>Task Detail</label>
-            <textarea class="memo" name="task_detail" placeholder="Place some text here"
+            <textarea disabled class="memo" name="task_detail" placeholder="Place some text here"
                       style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
           </div>
           <!-- /.form-group -->
@@ -400,213 +395,6 @@
         <!-- The time line -->
         <ul id="history" class="timeline">
           <!-- timeline time label -->
-          <li class="time-label">
-                <span id="order_date" class="bg-red">
-                  10 Feb. 2014
-                </span>
-          </li>
-          <!-- /.timeline-label -->
-          <!-- timeline item -->
-          <li>
-            <i class="fa fa-envelope bg-blue"></i>
-            <div class="timeline-item">
-              <span id="create_time" class="time"> 12:05</span>
-
-              <h3 class="timeline-header"><a class="request" href="#">nama pembuat </a> create a request</h3>
-              <div id="detail_task" class="timeline-body">
-                <h4>Detail Request </h4>
-              </div>
-              <div class="timeline-footer">
-                <!-- <a class="btn btn-primary btn-xs">Read more</a>
-                <a class="btn btn-danger btn-xs">Delete</a> -->
-              </div>
-            </div>
-          </li>
-          <!-- END timeline item -->
-          <!-- timeline item -->
-          <li>
-            <i class="fa fa-bell bg-aqua"></i>
-
-            <div class="timeline-item">
-              <!-- <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span> -->
-
-              <h3 class="timeline-header no-border">Status User is <a class="text-green" href="#">OPEN</a></h3>
-            </div>
-          </li>
-          <!-- END timeline item -->
-          <!-- timeline item -->
-          <li id='waiting'>
-            <i class="fa fa-hourglass-o bg-yellow"></i>
-            <div class="timeline-item">
-              <!-- <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span> -->
-
-              <h3 class="timeline-header no-border">Waitting respons by <a class="receipt_name" class="text-green" href="#">OPEN</a></h3>
-            </div>
-          </li>
-          <!-- timeline time label -->
-
-          <!-- recipient accept ________________________________________________________________________________________ -->
-          <li class="hide time-label">
-                <span id="start_date" class="bg-green">
-                  3 Jan. 2014
-                </span>
-          </li>
-          <!-- /.timeline-label -->
-          <!-- timeline item -->
-          <li class="hide acc">
-            <i class="fa fa-camera bg-purple"></i>
-
-            <div class="timeline-item">
-              <span id="respon" class="time"><i class="fa fa-clock-o"></i> </span>
-
-              <h3 class="timeline-header"><a class="receipt_name" href="#">Mina Lee</a> Change Status PIC to On Process</h3>
-              <div id="start_detail" class="timeline-body">
-
-              </div>
-            </div>
-          </li>
-          <!-- END timeline item -->
-          <!-- timeline item -->
-          <li class="hide">
-            <i class="fa fa-bell bg-aqua"></i>
-
-            <div class="timeline-item">
-              <!-- <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span> -->
-
-              <h3 id='deadline' class="timeline-header no-border">Status User is </h3>
-            </div>
-          </li>
-          <!-- END timeline item -->
-
-          <!-- solved kondisi_____________________________________________________________________________________________ -->
-
-          <li class="hide time-label">
-                <span id="finish_time" class="bg-green">
-                  3 Jan. 2014
-                </span>
-          </li>
-          <!-- /.timeline-label -->
-          <!-- timeline item -->
-          <li class="hide solved">
-            <i class="fa fa-camera bg-purple"></i>
-
-            <div class="timeline-item">
-              <span id="finish_time_jam" class="time"><i class="fa fa-clock-o"></i> 2 days ago</span>
-
-              <h3 class="timeline-header"><a class="receipt_name" href="#">Mina Lee</a> Change Status PIC to Solved</h3>
-              <div id="finish-detail" class="timeline-body">
-
-              </div>
-            </div>
-          </li>
-          <!-- END timeline item -->
-          <!-- timeline item -->
-          <li class="hide">
-            <i class="fa fa-bell bg-aqua"></i>
-
-            <div class="timeline-item">
-              <!-- <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span> -->
-
-              <h3 id='solved_status' class="timeline-header no-border">Status User is </h3>
-            </div>
-          </li>
-          <!-- END timeline item -->
-
-          <!-- unsolved condition ______________________________________________________________________________________________ -->
-          <li class="hide time-label">
-                <span id="unsolved_date" class="bg-green">
-                  3 Jan. 2014
-                </span>
-          </li>
-          <!-- /.timeline-label -->
-          <!-- timeline item -->
-          <li class="hide unsolved_detail">
-            <i class="fa fa-camera bg-purple"></i>
-
-            <div class="timeline-item">
-              <span id="unsolved_hour" class="time"><i class="fa fa-clock-o"></i> 2 days ago</span>
-
-              <h3 class="timeline-header"><a class="receipt_name" href="#">Mina Lee</a> Change Status User to <a class="text-danger">UNSOLVED</a></h3>
-              <div id="unsolved_note" class="timeline-body">
-
-              </div>
-            </div>
-          </li>
-          <li class="hide">
-            <i class="fa fa-bell bg-aqua"></i>
-
-            <div class="timeline-item">
-              <!-- <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span> -->
-
-              <h3 id='unsolved_status' class="timeline-header no-border">Status User is </h3>
-            </div>
-          </li>
-          <!-- calcel condition ________________________________________________________________________________________________ -->
-          <li class="hide time-label">
-                <span id="cancel_date" class="bg-green">
-                  3 Jan. 2014
-                </span>
-          </li>
-          <!-- /.timeline-label -->
-          <!-- timeline item -->
-          <li class="hide cancel_detail">
-            <i class="fa fa-camera bg-purple"></i>
-
-            <div class="timeline-item">
-              <span id="cancel_hour" class="time"><i class="fa fa-clock-o"></i> 2 days ago</span>
-
-              <h3 class="timeline-header"><a class="request" href="#">Mina Lee</a> Change Status User to <a class="text-danger">CANCEL</a></h3>
-              <div id="cancel_note" class="timeline-body">
-
-              </div>
-            </div>
-          </li>
-          <li class="hide">
-            <i class="fa fa-bell bg-aqua"></i>
-
-            <div class="timeline-item">
-              <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span>
-
-              <h3 id='cancel_status' class="timeline-header no-border">Status User is </h3>
-            </div>
-          </li>
-
-<!-- user close condotion  ______________________________________________________________________________-->
-          <li class="hide time-label">
-                <span id="close_time" class="bg-green">
-                  3 Jan. 2014
-                </span>
-          </li>
-          <!-- /.timeline-label -->
-          <!-- timeline item -->
-          <li class="hide closee">
-            <i class="fa fa-camera bg-purple"></i>
-
-            <div class="timeline-item">
-              <span id="close_time_jam" class="time"><i class="fa fa-clock-o"></i> 2 days ago</span>
-
-              <h3 class="timeline-header"><a class="request" href="#">Mina Lee</a> Change Status User to CLOSE</h3>
-              <div id="close-detail" class="timeline-body">
-
-              </div>
-            </div>
-          </li>
-          <li class="hide">
-            <i class="fa fa-bell bg-aqua"></i>
-
-            <div class="timeline-item">
-              <!-- <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span> -->
-
-              <h3 id='close_status' class="timeline-header no-border">Status User is </h3>
-            </div>
-          </li>
-          <!-- END timeline item -->
-
-
-          <!-- END timeline item -->
-          <li>
-            <i class="fa fa-clock-o bg-gray"></i>
-          </li>
         </ul>
         <!-- ./end timeline -->
       </div>
@@ -678,7 +466,7 @@ function edit(id_request){
            $('[name="nik_receipt"]').val(data.nik_receipt+"-"+data.location+"-"+data.division+"-"+data.department+"-"+data.first_name+" "+data.last_name);
            $('[name="doc_type"]').val(data.doc_type);
            $('[name="title"]').val(data.title);
-           $('#memo').html(data.task_detail);
+           $('.memo').html(data.task_detail);
           // $('#memo').data("wysihtml5").editor.setValue('new content');
            // $('.textarea').html('usman antharikta naik');
            $('[name="deadline"]').val(data.deadline);

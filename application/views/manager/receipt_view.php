@@ -57,11 +57,11 @@
       <h1>
         Receipt Task List
       </h1>
-      <ol class="breadcrumb">
+      <!-- <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li><a href="#">Receipt</a></li>
         <li class="active">list</li>
-      </ol>
+      </ol> -->
     </section>
 
     <!-- Main content -->
@@ -95,7 +95,7 @@
           <option value=""> Select one Recipient</option>
           <?php
             foreach ($pic as $key ) {
-              if($_SESSION['nik']==$key['nik'])
+              if($_SESSION['division']!=$key['division'])
                 continue;
               echo '<option value="'.$key['nik'].'">'.$key['nik'].'-'.$key['location'].'-'.$key['division'].'-'.$key['department'].'-'.$key['first_name'].' '.$key['last_name'].'</option>';
             }
@@ -222,6 +222,7 @@
                 //cek status pic
                 elseif($key['status_pic']=='solved'){
                   $class='success';
+                  $button='<a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
                 }
                 elseif ($key['status_pic']=='unsolved') {
                   $class='danger';
@@ -271,13 +272,8 @@
   </div>
   <!-- /.content-wrapper -->
 
-  <footer class="main-footer">
-    <div class="pull-right hidden-xs">
-      <b>Version</b> 2.4.0
-    </div>
-    <strong>Copyright &copy; 2014-2016 <a href="https://adminlte.io">Almsaeed Studio</a>.</strong> All rights
-    reserved.
-  </footer>
+  <!-- footer on here -->
+  <?php $this->load->view('include/footer')?>
 
   <!-- /.control-sidebar -->
   <!-- Add the sidebar's background. This div must be placed
@@ -453,9 +449,7 @@
           <!-- solved kondisi_____________________________________________________________________________________________ -->
           <!-- unsolved condition ______________________________________________________________________________________________ -->
           <!-- calcel condition ________________________________________________________________________________________________ -->
-
 <!-- user close condotion  ______________________________________________________________________________-->
-
 
           <!-- END timeline item -->
 

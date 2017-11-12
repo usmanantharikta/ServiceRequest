@@ -48,11 +48,11 @@ table th {
       <h1>
         Add New Request
       </h1>
-      <ol class="breadcrumb">
+      <!-- <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li><a href="#">service request</a></li>
         <li class="active">add</li>
-      </ol>
+      </ol> -->
     </section>
 
     <!-- Main content -->
@@ -67,7 +67,7 @@ table th {
       <div class="row">
         <div class="col-lg-6">
         <div class="box box-primary">
-          <div class="box-header with-border">">
+          <div class="box-header with-border">
             <h3 class="box-title">Form Add New Request</h3>
 
             <div class="box-tools pull-right">
@@ -78,7 +78,6 @@ table th {
             </div>
           </div>
           <div class="box-body">
-            <!-- <?php echo var_dump($pic)?> -->
             <div class="row">
               <div class="col-md-12">
                 <form id='add-form'  method="post" enctype="multipart/form-data">
@@ -207,7 +206,7 @@ table th {
               <th>Status User</th>
               <th>Close Date</th>
               <th>Transfer From</th>
-              <th>Action </th>
+              <!-- <th>Action </th> -->
             </tr>
           </thead>
           <tbody>
@@ -232,13 +231,8 @@ table th {
   </div>
   <!-- /.content-wrapper -->
 
-  <footer class="main-footer">
-    <div class="pull-right hidden-xs">
-      <b>Version</b> 2.4.0
-    </div>
-    <strong>Copyright &copy; 2017 <a href="https://adminlte.io">Maju Bersama</a>.</strong> All rights
-    reserved.
-  </footer>
+  <!-- footer on here -->
+  <?php $this->load->view('include/footer')?>
 
   <!-- Add the sidebar's background. This div must be placed
        immediately after the control sidebar -->
