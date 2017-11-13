@@ -213,29 +213,60 @@
                 $deadline=date_create($key['deadline']);
                 $now=date_create(date("Y-m-d"));
                 $day=date_diff($deadline,$now);
+                // echo $day->days.' <br>';
                 $button='<a class="btn btn-sm btn-primary" title="Edit" onclick="edit('.$key['id_request'].')"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
                 <a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
-                // echo $day->days;
-                if($_SESSION['nik']!=$key['nik']){
-                  $button='<a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
+                if($key['status_user']=='OPEN'){ //jika user open dan status pic masih kosong , waktu telah mendekati deadline
+                  if($key['status_pic']==''){ //jika masih kosong atau progress
+                    if($deadline < $now){ //expire
+                      $class='danger';
+                    }
+                    elseif ($day->days<4&&$day->days>=0) {
+                      $class='warning'; //mendekati deadline <3
+                    }
+                    else{
+                      $class='';
+                    }
+                  }
+                  elseif ($key['status_pic']=='onprogress') {
+                    $class='info';
+                  }
+                  elseif($key['status_pic']=='solved'){
+                    $class='success';
+                  }
+                  else{
+                    $class='danger';
+                  }
                 }
-                if($day->days<4&&$key['status_pic']=='onprogress'||$day->days<4&&$key['status_pic']==''){
-                  $class='warning';
-                }
-                //cek status pic
-                elseif($key['status_pic']=='solved'){
+                elseif ($key['status_user']=='CLOSE') {
                   $class='success';
-                }
-                elseif ($key['status_pic']=='unsolved') {
-                  $class='danger';
-                }
-                elseif($key['status_user']=='CANCEL'){
-                  $class='warning';
                   $button='<a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
                 }
                 else{
-                  $class='';
+                  $class='danger';
+                  $button='<a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
                 }
+                // // echo $day->days;
+                // if($_SESSION['nik']!=$key['nik']){
+                //   $button='<a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
+                // }
+                // if($day->days<4&&$key['status_pic']=='onprogress'||$day->days<4&&$key['status_pic']==''){
+                //   $class='warning';
+                // }
+                // //cek status pic
+                // elseif($key['status_pic']=='solved'){
+                //   $class='success';
+                // }
+                // elseif ($key['status_pic']=='unsolved') {
+                //   $class='danger';
+                // }
+                // elseif($key['status_user']=='CANCEL'){
+                //   $class='warning';
+                //   $button='<a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
+                // }
+                // else{
+                //   $class='';
+                // }
                 echo '
                 <tr class="'.$class.'">
                 <td>'.$key['nik'].'</td>
@@ -248,7 +279,7 @@
                 <td>'.$key['title'].'</td>
                 <td>'.$key['doc_type'].'</td>
                 <td>'.$key['order_date'].'</td>
-                <td>'.$key['deadline'].'</td>
+                <td>'.$key['deadline'].'<br>('.$day->days.'days)'.'</td>
                 <td>'.$key['status_pic'].'</td>
                 <td>'.$key['start_date'].'</td>
                 <td>'.$key['finish_date'].'</td>
@@ -348,7 +379,7 @@
               <div class="input-group-addon">
                 <i class="fa fa-calendar"></i>
               </div>
-              <input disabled name="deadline" type="text" class="form-control pull-right" id="datepicker">
+              <input id="deadline" disabled name="deadline" type="text" class="form-control pull-right" id="datepicker">
             </div>
             <!-- /.input group -->
           </div>
@@ -359,7 +390,8 @@
               <div class="input-group-addon">
                 <i class="fa fa-clock-o"></i>
               </div>
-              <select name="status_user" class="form-control select2" style="width: 100%;">
+              <select id="selected_stat" name="status_user" class="form-control select2" style="width: 100%;">
+                <option value="1">Select One</option>
                 <option value="OPEN">OPEN</option>
                 <option value="CANCEL">CANCEL</option>
                 <option value="CLOSE">CLOSE</option>
@@ -421,7 +453,7 @@
 </script>
 <script>
 var table;
-
+var save_status='';
 $(document).ready(function(){
   $("#list").addClass('active');
   $("#list").parent().parent().addClass('active menu-open');
@@ -460,6 +492,17 @@ function edit(id_request){
        dataType: "JSON",
        success: function(data)
        {
+         var now=moment();
+         var deadline=moment(data.deadline);
+         console.log(now> deadline);
+         if(now> deadline){
+           $("#deadline").prop('disabled', false);
+         }
+         else{
+           $("#deadline").prop('disabled', true);
+
+         }
+         save_status=data.status_pic;
           $(".memo").wysihtml5();
            $('[name="id_request"]').val(data.id_request);
            $('[name="id_task"]').val(data.id_task);
@@ -485,6 +528,25 @@ function edit(id_request){
 
 function save_edit()
 {
+  var input_stat=$("#selected_stat").val();
+  if(input_stat=='CLOSE'){
+    // alert('sadsadsad'+save_status);
+    if(save_status!='solved'){
+      bootbox.alert({
+        title: '<p class="text-danger">Error!!</p>',
+        message: '<p class="text-danger">You cannot CLOSE this task becuse status PIC is not complete</p>' ,
+      });
+      return 0;
+    }
+  }
+    if(input_stat==1){
+      bootbox.alert({
+        title: '<p class="text-danger">Error!!</p>',
+        message: '<p class="text-danger">Status cannot empty, Please select One</p>' ,
+      });
+      return 0;
+    }
+
         var formdata = new FormData($('#edit-form')[0]);
          event.preventDefault();
         $('.form-group').removeClass('has-error'); // clear error class

@@ -236,7 +236,7 @@ class Request extends CI_Controller {
 		<li>
 			<i class="fa fa-pencil bg-blue"></i>
 			<div class="timeline-item">
-				<span id="create_time" class="time">';
+				<span id="create_time" class="time"><i class="fa fa-clock-o"></i>';
 		$time_line.=date('h:i:s', $time);
 		$time_line.='</span>
 				<h3 class="timeline-header"><a class="request_name" href="#">';
@@ -462,13 +462,21 @@ class Request extends CI_Controller {
 		$status=$this->input->post('status_user');
 		$task_detail=$this->input->post('task_detail');
 		$close_date=Date('Y-m-d');
-		if($status=='CLOSE'){
+		$deadline=$this->input->post('deadline');
+		if($status=='OPEN'){
+			$update=$this->request_model->update_deadline(array('deadline'=>$deadline),array('id_task'=>$this->input->post('id_task')));
+			// echo json_encode(array('status'=>false, 'request_id'=>$id_request, 'hasil'=>$update, array('status_user'=>$status, 'close_date'=>$close_date, 'id_request')));
+			// exit();
+		}
+		elseif($status=='CLOSE'){
 			$log=$this->receipt_model->save_log(array('request_id'=>$id_request), array('close_time'=>date('Y-m-d H:i:s')));
+			$update=$this->request_model->update_request(array('id_request'=>$id_request), array('status_user'=>$status, 'close_date'=>$close_date));
+
 		}
 		elseif($status=='CANCEL'){
 			$log=$this->receipt_model->save_log(array('request_id'=>$id_request), array('cancel_time'=>date('Y-m-d H:i:s')));
+			$update=$this->request_model->update_request(array('id_request'=>$id_request), array('status_user'=>$status, 'close_date'=>$close_date));
 		}
-		$update=$this->request_model->update_request(array('id_request'=>$id_request), array('status_user'=>$status, 'close_date'=>$close_date));
 		echo json_encode(array('status'=>false, 'request_id'=>$id_request, 'hasil'=>$update, array('status_user'=>$status, 'close_date'=>$close_date, 'id_request')));
 	}
 

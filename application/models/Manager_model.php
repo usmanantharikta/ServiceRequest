@@ -69,7 +69,7 @@ class Manager_model extends CI_Model {
     //change receipt by manager or transfer to
     public function change_receipt($data, $where){
       $this->db->update('request', $data,$where);
-      echo json_encode($data);
+      // echo json_encode($data);
       return $this->db->affected_rows();
 
     }

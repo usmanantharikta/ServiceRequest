@@ -15,6 +15,7 @@ class Request_model extends CI_Model {
       return $query->result_array();
     }
 
+
     //get list of pic from table employee
     public function getnik(){
       $this->db->select('*');
@@ -112,6 +113,12 @@ class Request_model extends CI_Model {
     public function update_request($where, $data){
       $this->db->update('request', $data, $where);
       return $this->db->affected_rows();
+    }
+
+    public function update_deadline($data, $where){
+      $this->db->update('Task', $data, $where);
+      return $this->db->affected_rows();
+      
     }
 
 

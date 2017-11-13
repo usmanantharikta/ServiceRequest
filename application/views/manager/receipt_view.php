@@ -216,24 +216,37 @@
                 $button='<a class="btn btn-sm btn-primary" title="Edit" onclick="edit('.$key['id_request'].')"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
                 <a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
                 // echo $day->days;
-                if($day->days<4&&$key['status_pic']=='onprogress'||$day->days<4&&$key['status_pic']==''){
-                  $class='warning';
+                if($key['status_user']=='OPEN'){ //jika user open dan status pic masih kosong , waktu telah mendekati deadline
+                  if($key['status_pic']==''){ //jika masih kosong atau progress
+                    if($deadline < $now){ //expire
+                      $class='danger';
+                    }
+                    elseif ($day->days<4&&$day->days>=0) {
+                      $class='warning'; //mendekati deadline <3
+                    }
+                    else{
+                      $class='';
+                    }
+                  }
+                  elseif ($key['status_pic']=='onprogress') {
+                    $class='info';
+                  }
+                  elseif($key['status_pic']=='solved'){
+                    $class='success';
+                  }
+                  else{
+                    $class='danger';
+                  }
                 }
-                //cek status pic
-                elseif($key['status_pic']=='solved'){
-                  $class='success';
-                  $button='<a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
-                }
-                elseif ($key['status_pic']=='unsolved') {
-                  $class='danger';
-                }
-                elseif($key['status_user']=='CANCEL'){
+                elseif ($key['status_user']=='CLOSE') {
                   $class='success';
                   $button='<a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
                 }
                 else{
-                  $class='';
+                  $class='danger';
+                  $button='<a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
                 }
+
                 echo '
                 <tr class="'.$class.'">
                 <td>'.$key['nik'].'</td>
@@ -377,7 +390,8 @@
               <div class="input-group-addon">
                 <i class="fa fa-clock-o"></i>
               </div>
-              <select name="status_pic" class="form-control select2" style="width: 100%;">
+              <select  id="stat_pic" name="status_pic" class="form-control select2" style="width: 100%;">
+                <option value="1">Select One</option>
                 <option value="onprogress">ONPROGRESS</option>
                 <option value="solved">SOLVED</option>
                 <option value="unsolved">UNSOLVED</option>
@@ -422,7 +436,7 @@
         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
         <button type="button" onclick="save_edit()" class="btn btn-primary">Save changes</button>
       </div>
-    </div>hanya tes saja
+    </div>
     <!-- /.modal-content -->
   </div>
   <!-- /.modal-dialog -->
@@ -481,7 +495,9 @@
     moment().format();
 </script>
 <script>
+var flag_manager=false;
 var table;
+var save_stat='';
 var nik='';
 $(document).ready(function(){
   $("#receipt_menu").addClass('active');
@@ -526,6 +542,7 @@ function edit(id_request){
        dataType: "JSON",
        success: function(data)
        {
+         save_stat=data.status_pic;
           $(".memo").wysihtml5();
            $('[name="id_request"]').val(data.id_request);
            $('[name="nik_from"]').val(data.nik_receipt);
@@ -547,10 +564,12 @@ function edit(id_request){
            if(nik==data.nik_receipt){
              $('.not-myself').addClass('hide');
              $('.myself').removeClass('hide');
+             flag_manager=true;
            }
            else{
              $('.not-myself').removeClass('hide');
              $('.myself').addClass('hide');
+             flag_manager=false;
            }
        },
        error: function (jqXHR, textStatus, errorThrown)
@@ -562,6 +581,25 @@ function edit(id_request){
 
 function save_edit()
 {
+  var selected_stat=$('#stat_pic').val();
+  // alert('sadas'+selected_stat);
+  if(selected_stat==1&&flag_manager){
+    bootbox.alert({
+      title: '<p class="text-danger">Error!!</p>',
+      message: '<p class="text-danger">Status Cannot Empty !!!, Please Select One</p>' ,
+    });
+    return;
+  }
+  // alert('status before: '+save_stat);
+  if(selected_stat=='solved'){
+    if(save_stat!='onprogress'){
+    bootbox.alert({
+      title: '<p class="text-danger">Error!!</p>',
+      message: '<p class="text-warning">Please change status PIC to ONPROGRESS first !!!</p>' ,
+    });
+    return;
+  }
+}
         var formdata = new FormData($('#edit-form')[0]);
          event.preventDefault();
         $('.form-group').removeClass('has-error'); // clear error class

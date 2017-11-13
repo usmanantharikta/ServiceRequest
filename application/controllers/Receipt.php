@@ -73,8 +73,8 @@ class Receipt extends CI_Controller {
 		$transfer_to=$this->input->post('transfer_to');
 		$nik_from=$this->input->post('nik_from');
 		if($transfer_to!=''){
-			$update=$this->manager_model->change_receipt(array('nik_receipt'=>$transfer_to,'transfer_from'=>$nik_from, 'pic_note'=>$pic_note),array('id_request'=>$id_request));
-			$log=$this->receipt_model->save_log(array('request_id'=>$id_request), array('transfer-time'=>date('Y-m-d H:i:s')));
+			$update=$this->manager_model->change_receipt(array('nik_receipt'=>$transfer_to,'transfer_from'=>$nik_from, 'pic_note'=>$pic_note,'status_pic'=>'', 'start_date'=>'0000-00-00', 'finish_date'=>'0000-00-00 00:00:00'),array('id_request'=>$id_request));
+			$log=$this->receipt_model->save_log(array('request_id'=>$id_request), array('transfer-time'=>date('Y-m-d H:i:s'),'start_time'=>'0000-00-00 00:00:00', 'unsoved_time'=>'0000-00-00 00:00:00'));
 		}else{
 			if($status=='solved'){
 				// $update=$this->request_model->update_request(array('id_request'=>$id_request), array('status_pic'=>$status, 'finish_date'=>$close_date, 'pic_note'=>$pic_note));
@@ -89,7 +89,7 @@ class Receipt extends CI_Controller {
 
 			$update=$this->request_model->update_request(array('id_request'=>$id_request), array('status_pic'=>$status,'start_date'=>$start_date, 'finish_date'=>$finish_date, 'pic_note'=>$pic_note));
 		}
-		echo json_encode(array('status'=>false, 'hasil'=>$update, array('status_user'=>$status, 'close_date'=>$close_date, 'id_request')));
+		echo json_encode(array('status'=>true));
 	}
 
 

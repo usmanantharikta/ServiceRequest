@@ -216,8 +216,14 @@
                 $button='<a class="btn btn-sm btn-primary" title="Edit" onclick="edit('.$key['id_request'].')"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
                 <a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
                 // echo $day->days;
-                if($day->days<4&&$key['status_pic']==''||$day->days<4&&$key['status_pic']=='onprogress'){
+                // if($day->days<4&&$key['status_pic']==''||$day->days<4&&$key['status_pic']=='onprogress'){
+                //   $class='warning';
+                // }
+                if($day->days<4&&$day->days>=0&&$key['status_pic']=='onprogress'||$day->days<4&&$day->days>=0&&$key['status_pic']==''){
                   $class='warning';
+                }
+                elseif ($day->days<0) {
+                  $class='danger';
                 }
                 // if($day->days<4&&$key['status_pic']=='onprogress'){
                 //   $class='warning';
@@ -225,9 +231,13 @@
                 //cek status pic
                 elseif($key['status_pic']=='solved'){
                   $class='success';
+                  $button='<a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
+
                 }
                 elseif ($key['status_pic']=='unsolved') {
                   $class='danger';
+                  $button='<a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
+
                 }
                 elseif($key['status_user']=='CANCEL'){
                   $class='success';
@@ -240,7 +250,7 @@
                 <tr class="'.$class.'">
                 <td class="sorting_1">'.$key['nik'].'</td><td>'.$key['full_name'].'</td><td>'.$key['div'].'</td><td>123</td>
                 <td>'.$key['name_pic'].'</td><td>'.$key['div_pic'].'</td><td>'.$key['id_request'].'</td><td>'.$key['title'].'</td><td>'.$key['doc_type'].'</td><td>'.$key['order_date'].'</td>
-                <td>'.$key['deadline'].'</td><td>'.$key['status_pic'].'</td><td>'.$key['start_date'].'</td><td>'.$key['finish_date'].'</td>
+                <td>'.$key['deadline'].' ('.$day->days.'days)'.'</td><td>'.$key['status_pic'].'</td><td>'.$key['start_date'].'</td><td>'.$key['finish_date'].'</td>
                 <td>'.$key['status_user'].'</td><td>'.$key['close_date'].'</td><td>'.$key['transfer_from'].'</td>
                 <td>'.$button.'</td>
                 </tr>';
@@ -346,7 +356,8 @@
               <div class="input-group-addon">
                 <i class="fa fa-clock-o"></i>
               </div>
-              <select name="status_pic" class="form-control select2" style="width: 100%;">
+              <select id='stat_pic' name="status_pic" class="form-control select2" style="width: 100%;">
+                <option value="1">Select One</option>
                 <option value="onprogress">ONPROGRESS</option>
                 <option value="solved">SOLVED</option>
                 <option value="unsolved">UNSOLVED</option>
@@ -411,214 +422,7 @@
       <div class="modal-body">
         <!-- The time line -->
         <ul id="history" class="timeline">
-          <!-- timeline time label -->
-          <li class="time-label">
-                <span id="order_date" class="bg-red">
-                  10 Feb. 2014
-                </span>
-          </li>
-          <!-- /.timeline-label -->
-          <!-- timeline item -->
-          <li>
-            <i class="fa fa-envelope bg-blue"></i>
-            <div class="timeline-item">
-              <span id="create_time" class="time"> 12:05</span>
-
-              <h3 class="timeline-header"><a class="request" href="#">nama pembuat </a> create a request</h3>
-              <div id="detail_task" class="timeline-body">
-                <h4>Detail Request </h4>
-              </div>
-              <div class="timeline-footer">
-                <!-- <a class="btn btn-primary btn-xs">Read more</a>
-                <a class="btn btn-danger btn-xs">Delete</a> -->
-              </div>
-            </div>
-          </li>
-          <!-- END timeline item -->
-          <!-- timeline item -->
-          <li>
-            <i class="fa fa-bell bg-aqua"></i>
-
-            <div class="timeline-item">
-              <!-- <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span> -->
-
-              <h3 class="timeline-header no-border">Status User is <a class="text-green" href="#">OPEN</a></h3>
-            </div>
-          </li>
-          <!-- END timeline item -->
-          <!-- timeline item -->
-          <li id='waiting'>
-            <i class="fa fa-hourglass-o bg-yellow"></i>
-            <div class="timeline-item">
-              <!-- <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span> -->
-
-              <h3 class="timeline-header no-border">Waitting respons by <a class="receipt_name" class="text-green" href="#">OPEN</a></h3>
-            </div>
-          </li>
-          <!-- timeline time label -->
-
-          <!-- recipient accept ________________________________________________________________________________________ -->
-          <li class="hide time-label">
-                <span id="start_date" class="bg-green">
-                  3 Jan. 2014
-                </span>
-          </li>
-          <!-- /.timeline-label -->
-          <!-- timeline item -->
-          <li class="hide acc">
-            <i class="fa fa-camera bg-purple"></i>
-
-            <div class="timeline-item">
-              <span id="respon" class="time"><i class="fa fa-clock-o"></i> </span>
-
-              <h3 class="timeline-header"><a class="receipt_name" href="#">Mina Lee</a> Change Status PIC to On Process</h3>
-              <div id="start_detail" class="timeline-body">
-
-              </div>
-            </div>
-          </li>
-          <!-- END timeline item -->
-          <!-- timeline item -->
-          <li class="hide">
-            <i class="fa fa-bell bg-aqua"></i>
-
-            <div class="timeline-item">
-              <!-- <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span> -->
-
-              <h3 id='deadline' class="timeline-header no-border">Status User is </h3>
-            </div>
-          </li>
-          <!-- END timeline item -->
-
-          <!-- solved kondisi_____________________________________________________________________________________________ -->
-
-          <li class="hide time-label">
-                <span id="finish_time" class="bg-green">
-                  3 Jan. 2014
-                </span>
-          </li>
-          <!-- /.timeline-label -->
-          <!-- timeline item -->
-          <li class="hide solved">
-            <i class="fa fa-camera bg-purple"></i>
-
-            <div class="timeline-item">
-              <span id="finish_time_jam" class="time"><i class="fa fa-clock-o"></i> 2 days ago</span>
-
-              <h3 class="timeline-header"><a class="receipt_name" href="#">Mina Lee</a> Change Status PIC to Solved</h3>
-              <div id="finish-detail" class="timeline-body">
-
-              </div>
-            </div>
-          </li>
-          <!-- END timeline item -->
-          <!-- timeline item -->
-          <li class="hide">
-            <i class="fa fa-bell bg-aqua"></i>
-
-            <div class="timeline-item">
-              <!-- <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span> -->
-
-              <h3 id='solved_status' class="timeline-header no-border">Status User is </h3>
-            </div>
-          </li>
-          <!-- END timeline item -->
-
-          <!-- unsolved condition ______________________________________________________________________________________________ -->
-          <li class="hide time-label">
-                <span id="unsolved_date" class="bg-green">
-                  3 Jan. 2014
-                </span>
-          </li>
-          <!-- /.timeline-label -->
-          <!-- timeline item -->
-          <li class="hide unsolved_detail">
-            <i class="fa fa-camera bg-purple"></i>
-
-            <div class="timeline-item">
-              <span id="unsolved_hour" class="time"><i class="fa fa-clock-o"></i> 2 days ago</span>
-
-              <h3 class="timeline-header"><a class="receipt_name" href="#">Mina Lee</a> Change Status User to <a class="text-danger">UNSOLVED</a></h3>
-              <div id="unsolved_note" class="timeline-body">
-
-              </div>
-            </div>
-          </li>
-          <li class="hide">
-            <i class="fa fa-bell bg-aqua"></i>
-
-            <div class="timeline-item">
-              <!-- <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span> -->
-
-              <h3 id='unsolved_status' class="timeline-header no-border">Status User is </h3>
-            </div>
-          </li>
-          <!-- calcel condition ________________________________________________________________________________________________ -->
-          <li class="hide time-label">
-                <span id="cancel_date" class="bg-green">
-                  3 Jan. 2014
-                </span>
-          </li>
-          <!-- /.timeline-label -->
-          <!-- timeline item -->
-          <li class="hide cancel_detail">
-            <i class="fa fa-camera bg-purple"></i>
-
-            <div class="timeline-item">
-              <span id="cancel_hour" class="time"><i class="fa fa-clock-o"></i> 2 days ago</span>
-
-              <h3 class="timeline-header"><a class="request" href="#">Mina Lee</a> Change Status User to <a class="text-danger">CANCEL</a></h3>
-              <div id="cancel_note" class="timeline-body">
-
-              </div>
-            </div>
-          </li>
-          <li class="hide">
-            <i class="fa fa-bell bg-aqua"></i>
-
-            <div class="timeline-item">
-              <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span>
-
-              <h3 id='cancel_status' class="timeline-header no-border">Status User is </h3>
-            </div>
-          </li>
-
-<!-- user close condotion  ______________________________________________________________________________-->
-          <li class="hide time-label">
-                <span id="close_time" class="bg-green">
-                  3 Jan. 2014
-                </span>
-          </li>
-          <!-- /.timeline-label -->
-          <!-- timeline item -->
-          <li class="hide closee">
-            <i class="fa fa-camera bg-purple"></i>
-
-            <div class="timeline-item">
-              <span id="close_time_jam" class="time"><i class="fa fa-clock-o"></i> 2 days ago</span>
-
-              <h3 class="timeline-header"><a class="request" href="#">Mina Lee</a> Change Status User to CLOSE</h3>
-              <div id="close-detail" class="timeline-body">
-
-              </div>
-            </div>
-          </li>
-          <li class="hide">
-            <i class="fa fa-bell bg-aqua"></i>
-
-            <div class="timeline-item">
-              <!-- <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span> -->
-
-              <h3 id='close_status' class="timeline-header no-border">Status User is </h3>
-            </div>
-          </li>
-          <!-- END timeline item -->
-
-
-          <!-- END timeline item -->
-          <li>
-            <i class="fa fa-clock-o bg-gray"></i>
-          </li>
+          <!-- embeded on here -->
         </ul>
         <!-- ./end timeline -->
       </div>
@@ -645,7 +449,7 @@
 </script>
 <script>
 var table;
-
+var save_stat='';
 $(document).ready(function(){
   $("#receipt_menu").addClass('active');
   $("#receipt_menu").parent().parent().addClass('active menu-open');
@@ -684,6 +488,7 @@ function edit(id_request){
        dataType: "JSON",
        success: function(data)
        {
+          save_stat=data.status_pic;
           $(".memo").wysihtml5();
            $('[name="id_request"]').val(data.id_request);
            $('[name="id_task"]').val(data.id_task);
@@ -709,6 +514,25 @@ function edit(id_request){
 
 function save_edit()
 {
+    var selected_stat=$('#stat_pic').val();
+    // alert('sadas'+selected_stat);
+    if(selected_stat==1){
+      bootbox.alert({
+        title: '<p class="text-danger">Error!!</p>',
+        message: '<p class="text-danger">Status Cannot Empty !!!, Please Select One</p>' ,
+      });
+      return;
+    }
+    // alert('status before: '+save_stat);
+    if(selected_stat=='solved'){
+      if(save_stat!='onprogress'){
+      bootbox.alert({
+        title: '<p class="text-danger">Error!!</p>',
+        message: '<p class="text-warning">Please change status PIC to ONPROGRESS first !!!</p>' ,
+      });
+      return;
+    }
+  }
         var formdata = new FormData($('#edit-form')[0]);
          event.preventDefault();
         $('.form-group').removeClass('has-error'); // clear error class

@@ -207,7 +207,7 @@ table th {
               <th>Status User</th>
               <th>Close Date</th>
               <th>Transfer From</th>
-              <th>Action </th>
+              <!-- <th>Action </th> -->
             </tr>
           </thead>
           <tbody>

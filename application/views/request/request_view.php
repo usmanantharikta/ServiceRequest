@@ -216,12 +216,20 @@
                 $button='<a class="btn btn-sm btn-primary" title="Edit" onclick="edit('.$key['id_request'].')"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
                 <a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
                 // echo $day->days;
-                if($day->days<4&&$key['status_pic']=='onprogress'){
+                if($day->days<4&&$day->days>=0&&$key['status_pic']=='onprogress'||$day->days<4&&$day->days>=0&&$key['status_pic']==''){
                   $class='warning';
+                }
+                elseif ($day->days<0) {
+                  $class='danger';
                 }
                 //cek status pic
                 elseif($key['status_pic']=='solved'){
                   $class='success';
+                  $button='<a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
+                }
+                elseif($key['status_user']=='CLOSE'){
+                  $class='success';
+                  $button='<a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
                 }
                 elseif ($key['status_pic']=='unsolved') {
                   $class='danger';
@@ -237,7 +245,7 @@
                 <tr class="'.$class.'">
                 <td class="sorting_1">'.$key['nik'].'</td><td>'.$key['full_name'].'</td><td>'.$key['div'].'</td><td>123</td>
                 <td>'.$key['name_pic'].'</td><td>'.$key['div_pic'].'</td><td>'.$key['id_request'].'</td><td>'.$key['title'].'</td><td>'.$key['doc_type'].'</td><td>'.$key['order_date'].'</td>
-                <td>'.$key['deadline'].'</td><td>'.$key['status_pic'].'</td><td>'.$key['start_date'].'</td><td>'.$key['finish_date'].'</td>
+                <td>'.$key['deadline'].' ('.$day->days.'days)</td><td>'.$key['status_pic'].'</td><td>'.$key['start_date'].'</td><td>'.$key['finish_date'].'</td>
                 <td>'.$key['status_user'].'</td><td>'.$key['close_date'].'</td><td>'.$key['transfer_from'].'</td>
                 <td>'.$button.'</td>
                 </tr>';
@@ -341,8 +349,9 @@
               <div class="input-group-addon">
                 <i class="fa fa-clock-o"></i>
               </div>
-              <select name="status_user" class="form-control select2" style="width: 100%;">
-                <option value="OPEN">OPEN</option>
+              <select id="selected_stat" name="status_user" class="form-control select2" style="width: 100%;">
+                <option value="1">Select One</option>
+                <!-- <option value="OPEN">OPEN</option> -->
                 <option value="CANCEL">CANCEL</option>
                 <option value="CLOSE">CLOSE</option>
               </select>
@@ -403,7 +412,8 @@
 </script>
 <script>
 var table;
-
+var input_status=''; //for get status input selected
+var save_status=''; //for get status from db
 $(document).ready(function(){
   $("#list").addClass('active');
   $("#list").parent().parent().addClass('active menu-open');
@@ -443,6 +453,7 @@ function edit(id_request){
        success: function(data)
        {
           $(".memo").wysihtml5();
+            save_status=data.status_pic;
            $('[name="id_request"]').val(data.id_request);
            $('[name="id_task"]').val(data.id_task);
            $('[name="nik_receipt"]').val(data.nik_receipt+"-"+data.location+"-"+data.division+"-"+data.department+"-"+data.first_name+" "+data.last_name);
@@ -467,6 +478,16 @@ function edit(id_request){
 
 function save_edit()
 {
+        var input_stat=$("#selected_stat").val();
+        if(input_stat=='CLOSE'){
+          if(save_status!='solved'||save_status!='unsolved'){
+            bootbox.alert({
+              title: '<p class="text-danger">Error!!</p>',
+              message: '<p class="text-danger">You cannot CLOSE this task becuse status PIC is not complete</p>' ,
+            });
+            return 0;
+          }
+        }
         var formdata = new FormData($('#edit-form')[0]);
          event.preventDefault();
         $('.form-group').removeClass('has-error'); // clear error class
