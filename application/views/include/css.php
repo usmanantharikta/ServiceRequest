@@ -9,6 +9,8 @@
 <link rel="stylesheet" href="<?php echo base_url().'assets/bower_components/bootstrap-daterangepicker/daterangepicker.css'?>">
 <!-- bootstrap datepicker -->
 <link rel="stylesheet" href="<?php echo base_url().'assets/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css'?>">
+<!-- Daterange picker -->
+<link rel="stylesheet" href="<?php echo base_url().'assets/bower_components/bootstrap-daterangepicker/daterangepicker.css'?>">
 <!-- iCheck for checkboxes and radio inputs -->
 <link rel="stylesheet" href="<?php echo base_url().'assets/plugins/iCheck/all.css'?>">
 <!-- Bootstrap Color Picker -->
@@ -21,7 +23,10 @@
 <link rel="stylesheet" href="<?php echo base_url().'assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css'?>">
 <!-- DataTables -->
 <link rel="stylesheet" href="<?php echo base_url().'assets/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css'?>">
-
+<!-- Morris chart -->
+<link rel="stylesheet" href="<?php echo base_url().'assets/bower_components/morris.js/morris.css'?>">
+<!-- jvectormap -->
+<link rel="stylesheet" href="<?php echo base_url().'assets/bower_components/jvectormap/jquery-jvectormap.css'?>">
 <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++== -->
 <!-- Theme style -->
 <link rel="stylesheet" href="<?php echo base_url().'assets/dist/css/AdminLTE.min.css'?>">

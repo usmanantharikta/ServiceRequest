@@ -234,7 +234,7 @@
                   elseif($key['status_pic']=='solved'){
                     $class='success';
                   }
-                  else{
+                  else{ //unsolved
                     $class='danger';
                   }
                 }

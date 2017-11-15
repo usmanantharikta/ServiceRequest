@@ -132,8 +132,8 @@
                  if(data.status) //if success close modal and reload ajax table
                   {
                     // alert('sucsess login');
-                    if(data.level=='directur'){
-                      window.location.href = '<?php echo site_url().'/superadmin'?>';
+                    if(data.level=='directure'||data.level=='admin'){
+                      window.location.href = '<?php echo site_url().'/directure'?>';
                     }else if (data.level=='manager') {
                       window.location.href = '<?php echo site_url().'/manager'?>';
                     }else{

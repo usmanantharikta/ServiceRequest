@@ -37,7 +37,8 @@
 <!-- the fixed layout is not compatible with sidebar-mini -->
 <body class="hold-transition skin-blue fixed sidebar-mini">
   <?php
-  if(isset($_SESSION['username'])&&$_SESSION['level']=='directur'){
+  if(isset($_SESSION['username'])&&$_SESSION['level']=='directure'||$_SESSION['level']=='admin'){
+  // if(isset($_SESSION['username'])&&$_SESSION['level']=='directure'){
 
 ?>
 <!-- Site wrapper -->
@@ -239,7 +240,7 @@
                   else{
                     $class='danger';
                     $button='<a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
-                    
+
                   }
                 }
                 elseif ($key['status_user']=='CLOSE') {

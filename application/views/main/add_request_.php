@@ -28,7 +28,8 @@ table th {
 <!-- the fixed layout is not compatible with sidebar-mini -->
 <body class="hold-transition skin-blue fixed sidebar-mini">
   <?php
-  if(isset($_SESSION['username'])&&$_SESSION['level']=='directur'){
+  if(isset($_SESSION['username'])&&$_SESSION['level']=='directure'||$_SESSION['level']=='admin'){
+  // if(isset($_SESSION['username'])&&$_SESSION['level']=='directure'){
 
 ?>
 <!-- Site wrapper -->

@@ -37,7 +37,7 @@
 <!-- the fixed layout is not compatible with sidebar-mini -->
 <body class="hold-transition skin-blue fixed sidebar-mini">
   <?php
-  if(isset($_SESSION['username'])&&$_SESSION['level']=='directur'){
+  if(isset($_SESSION['username'])&&$_SESSION['level']=='directure'||$_SESSION['level']=='admin'){
 ?>
 <!-- Site wrapper -->
 <div class="wrapper">
@@ -84,7 +84,7 @@
         <div class="box-body">
           <!-- <?php var_dump($filter_data);?> -->
 <!-- form start -->
-<form  id='filter-form' class="form-horizontal" action="<?php echo site_url().'/superadmin'?>" method="post">
+<form  id='filter-form' class="form-horizontal" action="<?php echo site_url().'/directure'?>" method="post">
   <div class="col-lg-6">
     <div class="form-group">
       <label for="inputPassword3"  class="col-sm-2 control-label">User name</label>

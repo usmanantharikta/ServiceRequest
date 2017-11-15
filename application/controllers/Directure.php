@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Superadmin extends CI_Controller {
+class Directure extends CI_Controller {
 
 	/**
 	 * Index Page for this controller.
@@ -21,7 +21,7 @@ class Superadmin extends CI_Controller {
 
 	public function __construct(){
 		parent::__construct();
-		$this->load->model('super_model');
+		$this->load->model('directure_model');
 		$this->load->model('request_model');
 		$this->load->model('receipt_model');
 	}
@@ -36,7 +36,7 @@ class Superadmin extends CI_Controller {
 			'r.status_pic'=>$this->input->post('status_pic')
 		);
 
-		$da=$this->super_model->get_all_request($this->session->userdata('division'), $filter_data);
+		$da=$this->directure_model->get_all_request($this->session->userdata('division'), $filter_data);
 		$new_data=array();
 		foreach ($da as $key ) {
 			array_push($new_data, array(

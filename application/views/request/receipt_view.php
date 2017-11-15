@@ -215,36 +215,37 @@
                 $day=date_diff($deadline,$now);
                 $button='<a class="btn btn-sm btn-primary" title="Edit" onclick="edit('.$key['id_request'].')"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
                 <a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
-                // echo $day->days;
-                // if($day->days<4&&$key['status_pic']==''||$day->days<4&&$key['status_pic']=='onprogress'){
-                //   $class='warning';
-                // }
-                if($day->days<4&&$day->days>=0&&$key['status_pic']=='onprogress'||$day->days<4&&$day->days>=0&&$key['status_pic']==''){
-                  $class='warning';
-                }
-                elseif ($day->days<0) {
-                  $class='danger';
-                }
-                // if($day->days<4&&$key['status_pic']=='onprogress'){
-                //   $class='warning';
-                // }
-                //cek status pic
-                elseif($key['status_pic']=='solved'){
-                  $class='success';
-                  $button='<a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
+                if($key['status_user']=='OPEN'){ //jika user open dan status pic masih kosong , waktu telah mendekati deadline
+                  if($key['status_pic']==''){ //jika masih kosong atau progress
+                    if($deadline < $now){ //expire
+                      $class='danger';
+                    }
+                    elseif ($day->days<4&&$day->days>=0) {
+                      $class='warning'; //mendekati deadline <3
+                    }
+                    else{
+                      $class='';
+                    }
+                  }
+                  elseif ($key['status_pic']=='onprogress') {
+                    $class='info';
+                  }
+                  elseif($key['status_pic']=='solved'){
+                    $class='success';
+                    $button='<a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
 
+                  }
+                  else{
+                    $class='danger';
+                  }
                 }
-                elseif ($key['status_pic']=='unsolved') {
-                  $class='danger';
-                  $button='<a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
-
-                }
-                elseif($key['status_user']=='CANCEL'){
+                elseif ($key['status_user']=='CLOSE') {
                   $class='success';
                   $button='<a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
                 }
                 else{
-                  $class='';
+                  $class='danger';
+                  $button='<a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
                 }
                 echo '
                 <tr class="'.$class.'">
@@ -533,6 +534,15 @@ function save_edit()
       return;
     }
   }
+  if(selected_stat=='unsolved'){
+    if(save_stat!='onprogress'){
+    bootbox.alert({
+      title: '<p class="text-danger">Error!!</p>',
+      message: '<p class="text-warning">Please change status PIC to ONPROGRESS first !!!</p>' ,
+    });
+    return;
+  }
+}
         var formdata = new FormData($('#edit-form')[0]);
          event.preventDefault();
         $('.form-group').removeClass('has-error'); // clear error class

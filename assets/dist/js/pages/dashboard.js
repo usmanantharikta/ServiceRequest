@@ -147,6 +147,69 @@ $(function () {
     lineColors: ['#a0d0e0', '#3c8dbc'],
     hideHover : 'auto'
   });
+
+    $.ajax({
+        url : "staff/sumMonthly",
+        type: "GET",
+        dataType: "JSON",
+        success: function(data)
+        {
+          draw(data);
+          var num_req=0;
+          for(var i=0; i<data.donut_req.length; i++){
+            num_req+=parseInt(data.donut_req[i].value);
+            // console.log('panjang :'+data.donut[i].label);
+            $(".req-"+data.donut_req[i].label).text(data.donut_req[i].value);
+          }
+
+          var num_rec=0;
+          for(var i=0; i<data.donut.length; i++){
+            num_rec+=parseInt(data.donut[i].value);
+            console.log('panjang :'+data.donut[i].value);
+            $(".rec-"+data.donut[i].label).text(data.donut[i].value);
+          }
+
+          $('.all_request').text(num_req);
+          $('.all_receipt').text(num_rec);
+
+        },
+        error: function (jqXHR, textStatus, errorThrown)
+        {
+            alert('Error get data from ajax');
+        }
+    });
+
+  function draw(data){
+
+    // Donut Chart
+    var donut = new Morris.Donut({
+      element  : 'sales-chart',
+      resize   : true,
+      colors   : ['#3c8dbc', '#f56954', '#00a65a'],
+      data     : data.donut_req,
+      hideHover: 'auto'
+    });
+
+    // Donut Chart
+    var donut1 = new Morris.Donut({
+      element  : 'status-chart',
+      resize   : true,
+      colors   : [
+        '#f39c12', //kuning
+        '#3c8dbc', //biru
+        '#00a65a', //hijau
+        '#f56954', //merah
+
+      ],
+      data     : data.donut,
+      hideHover: 'auto'
+    });
+
+    console.log(data.donut);
+
+  }
+
+
   var line = new Morris.Line({
     element          : 'line-chart',
     resize           : true,
@@ -177,24 +240,13 @@ $(function () {
     gridTextSize     : 10
   });
 
-  // Donut Chart
-  var donut = new Morris.Donut({
-    element  : 'sales-chart',
-    resize   : true,
-    colors   : ['#3c8dbc', '#f56954', '#00a65a'],
-    data     : [
-      { label: 'Download Sales', value: 12 },
-      { label: 'In-Store Sales', value: 30 },
-      { label: 'Mail-Order Sales', value: 20 }
-    ],
-    hideHover: 'auto'
-  });
-
   // Fix for charts under tabs
   $('.box ul.nav a').on('shown.bs.tab', function () {
     area.redraw();
     donut.redraw();
+    donut1.redraw();
     line.redraw();
+    area2.redraw();
   });
 
   /* The todo list plugin */

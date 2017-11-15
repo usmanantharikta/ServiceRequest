@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Super_model extends CI_Model {
+class Directure_model extends CI_Model {
 
     public function __construct()
     {

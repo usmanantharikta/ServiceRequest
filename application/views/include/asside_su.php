@@ -35,8 +35,8 @@
           </span>
         </a>
         <ul class="treeview-menu">
-          <li id="add"><a href="<?php echo site_url().'/superadmin/add_request'?>"><i class="fa fa-circle-o"></i> Add New Request</a></li>
-          <li id="list"><a href="<?php echo site_url().'/superadmin'?>"><i class="fa fa-circle-o"></i> All Request</a></li>
+          <li id="add"><a href="<?php echo site_url().'/directure/add_request'?>"><i class="fa fa-circle-o"></i> Add New Request</a></li>
+          <li id="list"><a href="<?php echo site_url().'/directure'?>"><i class="fa fa-circle-o"></i> All Request</a></li>
           <!-- <li><a href="collapsed-sidebar.html"><i class="fa fa-circle-o"></i> Collapsed Sidebar</a></li> -->
         </ul>
       </li>
@@ -49,7 +49,7 @@
           </span>
         </a>
         <ul class="treeview-menu">
-          <li id='receipt_menu'><a href="<?php echo site_url().'/superadmin/receipt'?>"><i class="fa fa-circle-o"></i> Receipt Task List</a></li>
+          <li id='receipt_menu'><a href="<?php echo site_url().'/directure/receipt'?>"><i class="fa fa-circle-o"></i> Receipt Task List</a></li>
           <!-- <li><a href="../../index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li> -->
         </ul>
       </li>
@@ -62,6 +62,13 @@
           </span>
         </a>
         <ul class="treeview-menu">
+          <?php
+          if($_SESSION['level']=='admin'){
+            ?>
+          <li id='create'><a href="<?php echo site_url().'/admin/create_user'?>"><i class="fa fa-circle-o"></i> Create User</a></li>
+          <li id='reset'><a href="<?php echo site_url().'/admin/reset_password'?>"><i class="fa fa-circle-o"></i> Reset Password</a></li>
+          <li id='reset'><a href="<?php echo site_url().'/admin/add_employ'?>"><i class="fa fa-circle-o"></i> Add Employee</a></li>
+        <?php } ?>
           <li id='change'><a href="<?php echo site_url().'/general'?>"><i class="fa fa-circle-o"></i> Change Password</a></li>
           <li><a href="<?php echo site_url().'/general/logout'?>"><i class="fa fa-circle-o"></i> Sign out</a></li>
           <!-- <li><a href="../../index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li> -->

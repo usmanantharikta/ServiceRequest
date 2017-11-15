@@ -28,7 +28,7 @@ table th {
 <!-- the fixed layout is not compatible with sidebar-mini -->
 <body class="hold-transition skin-blue fixed sidebar-mini">
   <?php
-  if(isset($_SESSION['username'])){
+  if(isset($_SESSION['username'])&&$_SESSION['level']=='admin'){
 
 ?>
 <!-- Site wrapper -->
@@ -42,7 +42,7 @@ table th {
   if($_SESSION['level']=='manager'){
     $this->load->view('include/asside_gm');
   }
-  if ($_SESSION['level']=='directure' || $_SESSION['level']=='admin') {
+  if ($_SESSION['level']=='directure'|| $_SESSION['level']=='admin') {
     $this->load->view('include/asside_su');
   }
   if ($_SESSION['level']=='staff'){
@@ -60,7 +60,7 @@ table th {
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Add New Request
+        Reset Password
       </h1>
       <!-- <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -95,27 +95,29 @@ table th {
             <!-- <?php echo var_dump($pic)?> -->
             <div class="row">
               <div class="col-md-12">
-                <form id='change-form'  method="post" enctype="multipart/form-data">
-                  <input type="hidden" name="nik" value="<?php echo $_SESSION['nik'];?>">
+                <form id='reset-form'  method="post" enctype="multipart/form-data">
+                  <!-- <input type="hidden" name="nik" value="<?php echo $_SESSION['nik'];?>"> -->
                   <div class="form-group">
-                    <label>User Name</label>
+                    <label>User ID </label>
                     <div class="input-group ">
                       <div class="input-group-addon">
-                        <i class="fa fa-user"></i>
+                        <i class="fa fa-lock"></i>
                       </div>
-                      <?php
-                        foreach ($pic as $key ) {
-                          if($_SESSION['nik']==$key['nik']){
-                            echo '<input class="form-control" disabled value="'.$key['nik'].'-'.$key['location'].'-'.$key['division'].'-'.$key['department'].'-'.$key['first_name'].' '.$key['last_name'].'">';
-                            break;
+                      <select id='nik' name="nik" class="form-control select2" style="width: 100%;">
+                        <!-- <option> -----------------------Select One -----------------------</option> -->
+                        <option value=''> -----------------------Select One ID-----------------------</option>
+                        <?php
+                          foreach ($pic as $key ) {
+                            if($_SESSION['nik']!=$key['nik'])
+                            echo '<option value="'.$key['nik'].'">'.$key['nik'].'-'.$key['location'].'-'.$key['division'].'-'.$key['department'].'-'.$key['first_name'].' '.$key['last_name'].'</option>';
                           }
-                        }
-                      ?>
+                        ?>
+                      </select>
                     </div>
-                    <span class="help-block"></span>
+                    <span class="help-block old_password"></span>
                   </div>
                   <!-- /.form-group -->
-                  <div class="form-group">
+                  <!-- <div class="form-group">
                     <label>Password</label>
                     <div class="input-group ">
                       <div class="input-group-addon">
@@ -124,7 +126,7 @@ table th {
                       <input name="old_password" type="password" class="form-control" placeholder="Input Old Password">
                     </div>
                     <span class="help-block old_password"></span>
-                  </div>
+                  </div> -->
                   <!-- /.form-group -->
                   <div class="form-group">
                     <label>New Password</label>
@@ -196,8 +198,8 @@ table th {
 <script>
 var $table=$('#table_report').DataTable();
 $(document).ready(function(){
-  $("#change").addClass('active');
-  $("#change").parent().parent().addClass('active menu-open');
+  $("#reset").addClass('active');
+  $("#reset").parent().parent().addClass('active menu-open');
   // parent().parent().addClass('active');
 
   //Initialize Select2 Elements
@@ -217,12 +219,12 @@ $(document).ready(function(){
   });
 });
 function change_password(){
-         var formdata = new FormData($("#change-form")[0]);
+         var formdata = new FormData($("#reset-form")[0]);
          event.preventDefault();
         $('.form-group').removeClass('has-error'); // clear error class
         $('.help-block').empty(); // clear error string
            $.ajax({
-               url : '<?php echo site_url('/general/access') ?>',
+               url : '<?php echo site_url('/admin/save_reset') ?>',
                type: "POST",
                data: formdata,
                processData: false,

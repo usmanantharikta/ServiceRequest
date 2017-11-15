@@ -28,7 +28,7 @@ table th {
 <!-- the fixed layout is not compatible with sidebar-mini -->
 <body class="hold-transition skin-blue fixed sidebar-mini">
   <?php
-  if(isset($_SESSION['username'])){
+  if(isset($_SESSION['username'])&&$_SESSION['level']=='admin'){
 
 ?>
 <!-- Site wrapper -->
@@ -42,7 +42,7 @@ table th {
   if($_SESSION['level']=='manager'){
     $this->load->view('include/asside_gm');
   }
-  if ($_SESSION['level']=='directure' || $_SESSION['level']=='admin') {
+  if ($_SESSION['level']=='directure'||$_SESSION['level']=='admin') {
     $this->load->view('include/asside_su');
   }
   if ($_SESSION['level']=='staff'){
@@ -60,7 +60,7 @@ table th {
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Add New Request
+        Create User
       </h1>
       <!-- <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -95,33 +95,50 @@ table th {
             <!-- <?php echo var_dump($pic)?> -->
             <div class="row">
               <div class="col-md-12">
-                <form id='change-form'  method="post" enctype="multipart/form-data">
-                  <input type="hidden" name="nik" value="<?php echo $_SESSION['nik'];?>">
-                  <div class="form-group">
-                    <label>User Name</label>
-                    <div class="input-group ">
-                      <div class="input-group-addon">
-                        <i class="fa fa-user"></i>
-                      </div>
+                <form id='save-form'  method="post" enctype="multipart/form-data">
+                  <!-- <input type="hidden" name="nik" value="<?php echo $_SESSION['nik'];?>"> -->
+                  <!-- <div id='user' class="form-group">
+                    <select id='nik' name="username" class="form-control select2" style="width: 100%;">
+                      <option value=''> -----------------------Select One ID-----------------------</option>
                       <?php
-                        foreach ($pic as $key ) {
-                          if($_SESSION['nik']==$key['nik']){
-                            echo '<input class="form-control" disabled value="'.$key['nik'].'-'.$key['location'].'-'.$key['division'].'-'.$key['department'].'-'.$key['first_name'].' '.$key['last_name'].'">';
-                            break;
-                          }
+                        foreach ($user as $key ) {
+                          echo '<option value="'.$key['nik'].'">'.$key['nik'].'-'.$key['full_name'].'-'.$key['division'].'</option>';
                         }
                       ?>
-                    </div>
-                    <span class="help-block"></span>
-                  </div>
-                  <!-- /.form-group -->
+                    </select>
+                      <span class="help-block"></span>
+                  </div> -->
                   <div class="form-group">
-                    <label>Password</label>
+                    <label>User ID </label>
                     <div class="input-group ">
                       <div class="input-group-addon">
                         <i class="fa fa-lock"></i>
                       </div>
-                      <input name="old_password" type="password" class="form-control" placeholder="Input Old Password">
+                      <select id='username' name="username" class="form-control select2" style="width: 100%;">
+                        <!-- <option> -----------------------Select One -----------------------</option> -->
+                        <option value=''> -----------------------Select One ID-----------------------</option>
+                        <?php
+                          foreach ($user as $key ) {
+                            echo '<option value="'.$key['nik'].'">'.$key['nik'].'-'.$key['full_name'].'-'.$key['division'].'</option>';
+                          }
+                        ?>
+                      </select>
+                    </div>
+                    <span class="help-block old_password"></span>
+                  </div>
+                  <div class="form-group">
+                    <label>Jenis User (Level)</label>
+                    <div class="input-group ">
+                      <div class="input-group-addon">
+                        <i class="fa fa-lock"></i>
+                      </div>
+                      <select id='level' name="level" class="form-control select2" style="width: 100%;">
+                        <!-- <option> -----------------------Select One -----------------------</option> -->
+                        <option value="staff">STAFF</option>
+                        <option value="manager">MANAGER</option>
+                        <option value="directure">DIRECTURE</option>
+                        <option value="admin">ADMIN</option>
+                      </select>
                     </div>
                     <span class="help-block old_password"></span>
                   </div>
@@ -159,7 +176,7 @@ table th {
           </div>
           <!-- /.box-body -->
           <div class="box-footer ">
-            <button type="submit" onclick="change_password()" class="btn bg-olive">Change</button>
+            <button type="submit" onclick="create_user()" class="btn bg-olive">Change</button>
             <button onclick="reset()" class="btn btn-warning">Reset</button>
           </div>
           <!-- /.box-footer-->
@@ -196,8 +213,8 @@ table th {
 <script>
 var $table=$('#table_report').DataTable();
 $(document).ready(function(){
-  $("#change").addClass('active');
-  $("#change").parent().parent().addClass('active menu-open');
+  $("#create").addClass('active');
+  $("#create").parent().parent().addClass('active menu-open');
   // parent().parent().addClass('active');
 
   //Initialize Select2 Elements
@@ -216,13 +233,13 @@ $(document).ready(function(){
     startDate: dateToday,
   });
 });
-function change_password(){
-         var formdata = new FormData($("#change-form")[0]);
+function create_user(){
+         var formdata = new FormData($("#save-form")[0]);
          event.preventDefault();
         $('.form-group').removeClass('has-error'); // clear error class
         $('.help-block').empty(); // clear error string
            $.ajax({
-               url : '<?php echo site_url('/general/access') ?>',
+               url : '<?php echo site_url('/admin/save_user') ?>',
                type: "POST",
                data: formdata,
                processData: false,
@@ -235,6 +252,7 @@ function change_password(){
                      title: '<p class="text-success">Success</p>',
                      message: 'Your request has been sent',
                    });
+                   location.reload();
                }else{
                  var pesan="";
                  for (var i = 0; i < data.inputerror.length; i++)

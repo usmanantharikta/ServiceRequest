@@ -216,30 +216,60 @@
                 $button='<a class="btn btn-sm btn-primary" title="Edit" onclick="edit('.$key['id_request'].')"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
                 <a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
                 // echo $day->days;
-                if($day->days<4&&$day->days>=0&&$key['status_pic']=='onprogress'||$day->days<4&&$day->days>=0&&$key['status_pic']==''){
-                  $class='warning';
+                // if($day->days<4&&$day->days>=0&&$key['status_pic']=='onprogress'||$day->days<4&&$day->days>=0&&$key['status_pic']==''){
+                //   $class='warning';
+                // }
+                // elseif ($day->days<0) {
+                //   $class='danger';
+                // }
+                // //cek status pic
+                // elseif($key['status_pic']=='solved'){
+                //   $class='success';
+                //   $button='<a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
+                // }
+                // elseif($key['status_user']=='CLOSE'){
+                //   $class='success';
+                //   $button='<a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
+                // }
+                // elseif ($key['status_pic']=='unsolved') {
+                //   $class='danger';
+                // }
+                // elseif($key['status_user']=='CANCEL'){
+                //   $class='warning';
+                //   $button='<a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
+                // }
+                // else{
+                //   $class='';
+                // }
+                if($key['status_user']=='OPEN'){ //jika user open dan status pic masih kosong , waktu telah mendekati deadline
+                  if($key['status_pic']==''){ //jika masih kosong atau progress
+                    if($deadline < $now){ //expire
+                      $class='danger';
+                    }
+                    elseif ($day->days<4&&$day->days>=0) {
+                      $class='warning'; //mendekati deadline <3
+                    }
+                    else{
+                      $class='';
+                    }
+                  }
+                  elseif ($key['status_pic']=='onprogress') {
+                    $class='info';
+                  }
+                  elseif($key['status_pic']=='solved'){
+                    $class='success';
+                  }
+                  else{
+                    $class='danger';
+                  }
                 }
-                elseif ($day->days<0) {
-                  $class='danger';
-                }
-                //cek status pic
-                elseif($key['status_pic']=='solved'){
+                elseif ($key['status_user']=='CLOSE') {
                   $class='success';
-                  $button='<a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
-                }
-                elseif($key['status_user']=='CLOSE'){
-                  $class='success';
-                  $button='<a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
-                }
-                elseif ($key['status_pic']=='unsolved') {
-                  $class='danger';
-                }
-                elseif($key['status_user']=='CANCEL'){
-                  $class='warning';
                   $button='<a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
                 }
                 else{
-                  $class='';
+                  $class='danger';
+                  $button='<a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
                 }
                 echo '
                 <tr class="'.$class.'">
@@ -351,7 +381,7 @@
               </div>
               <select id="selected_stat" name="status_user" class="form-control select2" style="width: 100%;">
                 <option value="1">Select One</option>
-                <!-- <option value="OPEN">OPEN</option> -->
+                <option value="OPEN">OPEN</option>
                 <option value="CANCEL">CANCEL</option>
                 <option value="CLOSE">CLOSE</option>
               </select>
@@ -452,6 +482,16 @@ function edit(id_request){
        dataType: "JSON",
        success: function(data)
        {
+         
+         var now=moment();
+         var deadline=moment(data.deadline);
+         if(now> deadline){
+           $('[name="deadline"]').prop('disabled', false);
+         }
+         else{
+           $('[name="deadline"]').prop('disabled', true);
+
+         }
           $(".memo").wysihtml5();
             save_status=data.status_pic;
            $('[name="id_request"]').val(data.id_request);
@@ -480,7 +520,7 @@ function save_edit()
 {
         var input_stat=$("#selected_stat").val();
         if(input_stat=='CLOSE'){
-          if(save_status!='solved'||save_status!='unsolved'){
+          if(save_status!='solved'){
             bootbox.alert({
               title: '<p class="text-danger">Error!!</p>',
               message: '<p class="text-danger">You cannot CLOSE this task becuse status PIC is not complete</p>' ,
