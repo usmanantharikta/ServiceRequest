@@ -64,7 +64,12 @@ class Request_model extends CI_Model {
       $this->db->from('employee');
       $query=$this->db->get();
       $key=$query->result_array();
-      return $key[0]['location'].'-'.$key[0]['division'].'-'.$key[0]['department'];
+      if(count($key)>0){
+        return $key[0]['location'].'-'.$key[0]['division'].'-'.$key[0]['department'];
+      // return $key[0]['first_name'].' '.$key[0]['last_name'];
+      }else {
+      return "";
+      }
     }
 
     public function get_name($nik){
@@ -73,7 +78,14 @@ class Request_model extends CI_Model {
       $this->db->from('employee');
       $query=$this->db->get();
       $key=$query->result_array();
+      // print_r($key);
+      // echo count($key);
+      if(count($key)>0){
       return $key[0]['first_name'].' '.$key[0]['last_name'];
+      }else {
+      return "-";
+      }
+
     }
 
     public function get_data_byid($id){
@@ -118,7 +130,7 @@ class Request_model extends CI_Model {
     public function update_deadline($data, $where){
       $this->db->update('Task', $data, $where);
       return $this->db->affected_rows();
-      
+
     }
 
 

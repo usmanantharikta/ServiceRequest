@@ -148,7 +148,21 @@ table th {
                       </div>
                       <input name="deadline" type="text" placeholder="deadline date" class="form-control pull-right" id="datepicker">
                     </div>
-                    <!-- /.input group -->
+                      <!-- /.input group -->
+                  </div>
+                  <div class="form-group">
+                    <label>File</label>
+                    <div class="bapak">
+                      <div class="input-group entry">
+                        <div class="input-group-addon" style="padding: 0px 0px;">
+                          <button class="btn btn-success btn-plus">
+                            <i class="fa fa-plus"></i>
+                          </button>
+                        </div>
+                        <input name="file[]"  type="file" placeholder="deadline date" class="form-control pull-right" id="datepicker">
+                      </div>
+                      <!-- /.input group -->
+                    </div>
                   </div>
                   <!-- /.form group -->
                 </form>
@@ -222,6 +236,8 @@ table th {
         <!-- ./end form -->
       </div>
     <!-- /.box -->
+
+
     </div>
     <!-- ./col-lg-12 -->
     </div>
@@ -349,7 +365,7 @@ $(document).ready(function(){
     allowClear: true
   });
   // editor $('.textarea').wysihtml5()
-  $('.textarea').wysihtml5();
+  // $('.textarea').wysihtml5();
   // $('.textarea').html('usman antharikta naik');
   //Date picker
   var dateToday = new Date();
@@ -466,6 +482,55 @@ function reset()
 {
   $('#add-form')[0].reset(); // reset form on modals
 }
+
+$(function()
+{
+    $(document).on('click', '.btn-add', function(e)
+    {
+      console.log('add');
+        e.preventDefault();
+        var controlForm = $('.controls:first'),
+            currentEntry = $(this).parents('.entry:first'),
+            newEntry = $(currentEntry.clone()).appendTo(controlForm);
+        console.log('controlForm :'+controlForm);
+        console.log('currentEntry: '+currentEntry);
+        newEntry.find('input').val('');
+        controlForm.find('.entry:not(:last) .btn-add')
+            .removeClass('btn-add').addClass('btn-remove')
+            .removeClass('btn-success').addClass('btn-danger')
+            .html('<span class="glyphicon glyphicon-minus"></span>');
+    }).on('click', '.btn-remove', function(e)
+    {
+      $(this).parents('.entry:first').remove();
+
+		e.preventDefault();
+		return false;
+	});
+});
+
+$(function()
+{
+    $(document).on('click', '.btn-plus', function(e)
+    {
+        e.preventDefault();
+        var controlForm = $('.bapak:last'),
+            currentEntry = $(this).parents().parents('.entry:first'),
+            newEntry = $(currentEntry.clone()).appendTo(controlForm);
+        console.log('controlForm :'+controlForm);
+        console.log('currentEntry: '+currentEntry);
+        newEntry.find('input').val('');
+        controlForm.find('.input-group-addon:not(:first)  .btn-plus').removeClass('btn-plus').addClass('btn-remove')
+        .removeClass('btn-success')
+        .addClass('btn-danger')
+        .html('<span class="glyphicon glyphicon-minus"></span>');
+    }).on('click', '.btn-remove', function(e)
+    {
+      $(this).parents().parents('.entry:first').remove();
+
+		e.preventDefault();
+		return false;
+	});
+});
 
 
 </script>

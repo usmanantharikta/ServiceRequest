@@ -55,6 +55,8 @@
 <!-- bootbox -->
 <script src="<?php echo base_url().'assets/bootbox/bootbox.js'?>"></script>
 <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++= -->
+<!-- dropzone -->
+<script src="<?php echo base_url().'assets/dropzone/dist/dropzone.js'?>"></script>
 <!-- AdminLTE App -->
 <script src="<?php echo base_url().'assets/dist/js/adminlte.min.js'?>"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->

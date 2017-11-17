@@ -35,3 +35,7 @@
 <!-- AdminLTE Skins. Choose a skin from the css/skins
      folder instead of downloading all of them to reduce the load. -->
 <link rel="stylesheet" href="<?php echo base_url().'assets/dist/css/skins/_all-skins.min.css'?>">
+
+<!-- dropzone -->
+<link rel='stylesheet' herf="<?php echo base_url().'assets/dropzone/dist/dropzone.css'?>">
+<link rel="stylesheet" href="<?php echo base_url().'assets/dropzone/dist/basic.css'?>">

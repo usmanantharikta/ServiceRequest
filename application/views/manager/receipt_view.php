@@ -86,6 +86,7 @@
           <!-- <?php var_dump($filter_data);?> -->
 <!-- form start -->
 <form  id='filter-form' class="form-horizontal" action="<?php echo site_url().'/manager/receipt'?>" method="post">
+  <input type='hidden' name='export'>
   <div class="col-lg-6">
     <div class="form-group">
       <label for="inputPassword3"  class="col-sm-2 control-label">PIC name</label>
@@ -157,6 +158,7 @@
   <div style="border-top: 1px solid #ffffff" class="box-footer">
     <button onclick="reset_fo()" class="btn pull-right btn-warning">Reset</button>
     <button onclick="submit()" class="btn btn-info pull-right">Filter</button>
+    <button onclick="export_file()" class="btn btn-primary pull-right">Export</button>
   </div>
   <!-- /.box-footer -->
         </div>
@@ -754,6 +756,14 @@ function reset_fo()
 
 function submit()
 {
+    $('[name="export"]').val('');
+  $('#filter-form').submit();
+}
+
+function export_file()
+{
+  $('[name="export"]').val('yes');
+  console.log('test: '+$('[name="export"]').val());
   $('#filter-form').submit();
 }
 

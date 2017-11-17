@@ -25,7 +25,18 @@
 <!-- load header -->
 <?php $this->load->view('include/header');?>
   <!-- Left side column. contains the logo and sidebar -->
-  <?php $this->load->view('include/asside');?>
+  <!-- load asside  -->
+  <?php
+  if($_SESSION['level']=='manager'){
+    $this->load->view('include/asside_gm');
+  }
+  if ($_SESSION['level']=='directure' || $_SESSION['level']=='admin') {
+    $this->load->view('include/asside_su');
+  }
+  if ($_SESSION['level']=='staff'){
+    $this->load->view('include/asside');
+  }
+  ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -175,7 +186,7 @@
           <div class="nav-tabs-custom">
             <!-- Tabs within a box -->
             <ul class="nav nav-tabs pull-right">
-              <li><a href="#revenue-chart" data-toggle="tab">Area</a></li>
+              <!-- <li><a href="#revenue-chart" data-toggle="tab">Area</a></li> -->
               <li class="active" ><a href="#sales-chart" data-toggle="tab">Donut</a></li>
               <li class="pull-left header"><i class="fa fa-inbox"></i> Status Request</li>
             </ul>
@@ -194,7 +205,7 @@
           <div class="nav-tabs-custom">
             <!-- Tabs within a box -->
             <ul class="nav nav-tabs pull-right">
-              <li><a href="#sum-receipt-chart" data-toggle="tab">Area</a></li>
+              <!-- <li><a href="#sum-receipt-chart" data-toggle="tab">Area</a></li> -->
               <li class="active" ><a href="#status-chart" data-toggle="tab">Donut</a></li>
               <li class="pull-left header"><i class="fa fa-inbox"></i> Status Receipt</li>
             </ul>
