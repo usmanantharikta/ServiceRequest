@@ -29,12 +29,10 @@ class Staff extends CI_Controller {
 		$this->db->select($sqli,false);
 		$query=$this->db->get();
 		$status=$query->result_array();
-
 		$json_status=array();
 		$solved=array();
 		$unsolved=array();
 		$data=array();
-
 		foreach ($status as $key) {
 			if($key['status_pic']==''){
 				array_push($json_status, array(
@@ -61,10 +59,10 @@ class Staff extends CI_Controller {
 
 		echo json_encode(array('value'=>$data, 'donut'=>$json_status, 'donut_req'=>$json_request));
 	}
-
+//count my request
 	private function count_request(){
 		$nik=$this->session->userdata('nik');
-		$request='status_user, COUNT(status_pic) as "jumlah" FROM request where nik_receipt="'.$nik.'" GROUP BY status_user'; // request
+		$request='status_user, COUNT(status_pic) as "jumlah" FROM request where nik_request="'.$nik.'" GROUP BY status_user'; // request
 		$this->db->select($request,false);
 		$query=$this->db->get();
 		$status=$query->result_array();

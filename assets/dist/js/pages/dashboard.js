@@ -163,14 +163,21 @@ $(function () {
           }
 
           var num_rec=0;
+          var un_read=0;
           for(var i=0; i<data.donut.length; i++){
             num_rec+=parseInt(data.donut[i].value);
-            console.log('panjang :'+data.donut[i].value);
+            //cek UnRead
+            if(data.donut[i].label=='UnRead'||data.donut[i].label=='onprogress'){
+              un_read+=parseInt(data.donut[i].value);
+            }
             $(".rec-"+data.donut[i].label).text(data.donut[i].value);
           }
-
+          //all reques sum
           $('.all_request').text(num_req);
+          //jumlah all receipt
           $('.all_receipt').text(num_rec);
+          //on progress
+          $('.rec-onprogress').text(un_read);
 
         },
         error: function (jqXHR, textStatus, errorThrown)

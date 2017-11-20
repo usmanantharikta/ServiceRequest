@@ -200,7 +200,7 @@ class Request extends CI_Controller {
 	// retrive data form from add request
 	public function add(){
 		$status_upload='';
-		 $this->_validate();
+		$this->_validate();
 		$request=array(
 			'nik_request'=>$this->input->post('nik_request'),
 			'nik_receipt'=>$this->input->post('nik_receipt'),
@@ -216,7 +216,7 @@ class Request extends CI_Controller {
 		);
 		$result=$this->request_model->save_request($request, $task);
 		$status_upload=$this->upload_file($result);
-
+		$asdadd=$this->request_model->createNotif($result, $this->input->post('nik_receipt'), $this->input->post('nik_request'));
 		echo json_encode(array('status'=>true, 'result'=>$result, 'upload'=>$status_upload));
 	}
 
@@ -225,9 +225,9 @@ class Request extends CI_Controller {
 		$data['error_string'] = array();
 		$data['inputerror'] = array();
 		$data['status'] = TRUE;
-
-		if(!empty($_FILES['file']['name'])){
-					 $filesCount = count($_FILES['file']['name']);
+		$filesCount = count($_FILES['file']['name']);
+		// var_dump($_FILES);
+		if($filesCount!=0&&$_FILES['file']['name'][0]!=''){
 					 for($i = 0; $i < $filesCount; $i++){
 							 $_FILES['userFile']['name'] = $_FILES['file']['name'][$i];
 							 $_FILES['userFile']['type'] = $_FILES['file']['type'][$i];
@@ -253,9 +253,9 @@ class Request extends CI_Controller {
 							 }
 					 }
 		}else{
-			$data['inputerror'][] = 'file[]';
-			$data['error_string'][] = 'Tidak Boleh kosong';
-			$data['status'] = FALSE;
+			// $data['inputerror'][] = 'file[]';
+			// $data['error_string'][] = 'File Tidak Boleh kosong';
+			// $data['status'] = FALSE;
 		}
 
 		if($data['status'] === FALSE)
@@ -402,6 +402,18 @@ class Request extends CI_Controller {
 		// echo json_encode(array('d'=>$data, 'name'=>$full));
 	}
 
+	public function get_link($request, $nik){
+		// $nik=$this->session->userdata('nik');
+		$dir='uploads/request/'.$nik.'/'.$request;
+		$files=scandir($dir);
+		$link='';
+		for($i=2;$i<count($files);$i++){
+			$link.='<a href="'.base_url().'/'.$dir.'/'.$files[$i].'" download>'.$files[$i].'</a> <br>';
+		}
+		return $link;
+
+	}
+
 	private function data_tempel($data, $full){
 		// was create
 		$name_req=$data->first_name.' '.$data->last_name.'-'.$data->location.'-'.$data->division.'-'.$data->department;
@@ -426,9 +438,10 @@ class Request extends CI_Controller {
 		$time_line.=$name_req;
 		$time_line.='</a> create a request</h3>
 				<div id="detail_task" class="timeline-body">
-					<h4>Detail Request </h4>';
+					<h4>Detail Request :</h4>';
 		$time_line.=$data->task_detail;
-		$time_line.='</div>
+		$time_line.=' <h4>File:  </h4>'.$this->get_link($data->id_request, $data->nik_request).'
+		</div>
 				<div class="timeline-footer">
 				</div>
 			</div>
@@ -583,7 +596,7 @@ class Request extends CI_Controller {
 						              <div id="finish-detail" class="timeline-body">
 													<p>Detail Task :</p>
 													'.$data->task_detail.'
-						              </div>
+						              <h4>File:  </h4>'.$this->get_link($data->id_request, $data->id_request).'
 						            </div>
 						          </li>
 						          <!-- END timeline item -->
@@ -618,7 +631,7 @@ class Request extends CI_Controller {
 						              <div id="finish-detail" class="timeline-body">
 													<p>Detail Task :</p>
 													'.$data->task_detail.'
-						              </div>
+						              <h4>File:  </h4>'.$this->get_link($data->id_request).'
 						            </div>
 						          </li>
 						          <!-- END timeline item -->

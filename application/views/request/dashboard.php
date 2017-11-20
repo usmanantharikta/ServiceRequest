@@ -33,10 +33,11 @@
   if ($_SESSION['level']=='directure' || $_SESSION['level']=='admin') {
     $this->load->view('include/asside_su');
   }
-  if ($_SESSION['level']=='staff'){
+  if ($_SESSION['level']=='staf'){
     $this->load->view('include/asside');
   }
   ?>
+
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -233,7 +234,6 @@
   </footer>
 
   <!-- Control Sidebar -->
-<?php $this->load->view('include/asside');?>
   <!-- /.control-sidebar -->
   <!-- Add the sidebar's background. This div must be placed
        immediately after the control sidebar -->

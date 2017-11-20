@@ -48,6 +48,11 @@ class Request_model extends CI_Model {
       return $this->db->insert_id();
     }
 
+    public function createNotif($result, $receipt , $request){
+      $this->db->insert('notification', array('nik_receipt'=>$receipt, 'value'=>'New Request', 'status'=>'unread', 'request_id'=>$result, 'nik_request'=>$request));
+      return $this->db->insert_id();
+    }
+
     public function get_last($id){
       $this->db->select('*');
       $this->db->from('request');

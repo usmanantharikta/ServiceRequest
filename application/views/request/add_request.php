@@ -65,7 +65,7 @@ table th {
       </div> -->
       <!-- Default box -->
       <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-12">
         <div class="box box-primary">
           <div class="box-header with-border">
             <h3 class="box-title">Form Add New Request</h3>
@@ -80,8 +80,8 @@ table th {
           <div class="box-body">
             <!-- <?php echo var_dump($pic)?> -->
             <div class="row">
-              <div class="col-md-12">
                 <form id='add-form'  method="post" enctype="multipart/form-data">
+                  <div class="col-md-6">
                   <input type="hidden" name="nik_request" value="<?php echo $_SESSION['nik'];?>">
                   <div class="form-group">
                     <label>PIC</label>
@@ -133,12 +133,7 @@ table th {
                   <span class="help-block"></span>
                   </div>
                   <!-- /.form-group -->
-                  <div class="form-group">
-                    <label>Task Detail</label>
-                    <textarea name="task_detail" class="textarea" value="sdsfsfddsfd" placeholder="Place some detail about this task here"
-                              style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
-                  </div>
-                  <!-- /.form-group -->
+
                   <!-- Date -->
                   <div class="form-group">
                     <label>Deadline</label>
@@ -165,19 +160,29 @@ table th {
                     </div>
                   </div>
                   <!-- /.form group -->
+                </div>
+                <!-- col-md-6 -->
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Task Detail</label>
+                    <textarea name="task_detail" class="textarea" value="sdsfsfddsfd" placeholder="Place some detail about this task here"
+                              style="width: 100%; height: 280px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+                  </div>
+                  <!-- /.form-group -->
+                </div>
+                <!-- col-md-6 -->
                 </form>
                 <!-- ./end form -->
-              </div>
-              <!-- ./col -->
             </div>
             <!-- /.row -->
+            <div class="box-footer pull-right ">
+              <button type="submit" onclick="add_req()" class="btn bg-olive">Request</button>
+              <button onclick="reset()" class="btn btn-warning">Reset</button>
+            </div>
+            <!-- /.box-footer-->
           </div>
           <!-- /.box-body -->
-          <div class="box-footer ">
-            <button type="submit" onclick="add_req()" class="btn bg-olive">Request</button>
-            <button onclick="reset()" class="btn btn-warning">Reset</button>
-          </div>
-          <!-- /.box-footer-->
+
         </div>
       <!-- /.box -->
       </div>
@@ -483,54 +488,54 @@ function reset()
   $('#add-form')[0].reset(); // reset form on modals
 }
 
-$(function()
-{
-    $(document).on('click', '.btn-add', function(e)
-    {
-      console.log('add');
-        e.preventDefault();
-        var controlForm = $('.controls:first'),
-            currentEntry = $(this).parents('.entry:first'),
-            newEntry = $(currentEntry.clone()).appendTo(controlForm);
-        console.log('controlForm :'+controlForm);
-        console.log('currentEntry: '+currentEntry);
-        newEntry.find('input').val('');
-        controlForm.find('.entry:not(:last) .btn-add')
-            .removeClass('btn-add').addClass('btn-remove')
-            .removeClass('btn-success').addClass('btn-danger')
-            .html('<span class="glyphicon glyphicon-minus"></span>');
-    }).on('click', '.btn-remove', function(e)
-    {
-      $(this).parents('.entry:first').remove();
+// $(function()
+// {
+//     $(document).on('click', '.btn-add', function(e)
+//     {
+//       console.log('add');
+//         e.preventDefault();
+//         var controlForm = $('.controls:first'),
+//             currentEntry = $(this).parents('.entry:first'),
+//             newEntry = $(currentEntry.clone()).appendTo(controlForm);
+//         console.log('controlForm :'+controlForm);
+//         console.log('currentEntry: '+currentEntry);
+//         newEntry.find('input').val('');
+//         controlForm.find('.entry:not(:last) .btn-add')
+//             .removeClass('btn-add').addClass('btn-remove')
+//             .removeClass('btn-success').addClass('btn-danger')
+//             .html('<span class="glyphicon glyphicon-minus"></span>');
+//     }).on('click', '.btn-remove', function(e)
+//     {
+//       $(this).parents('.entry:first').remove();
+//
+// 		e.preventDefault();
+// 		return false;
+// 	});
+// });
 
-		e.preventDefault();
-		return false;
-	});
-});
-
-$(function()
-{
-    $(document).on('click', '.btn-plus', function(e)
-    {
-        e.preventDefault();
-        var controlForm = $('.bapak:last'),
-            currentEntry = $(this).parents().parents('.entry:first'),
-            newEntry = $(currentEntry.clone()).appendTo(controlForm);
-        console.log('controlForm :'+controlForm);
-        console.log('currentEntry: '+currentEntry);
-        newEntry.find('input').val('');
-        controlForm.find('.input-group-addon:not(:first)  .btn-plus').removeClass('btn-plus').addClass('btn-remove')
-        .removeClass('btn-success')
-        .addClass('btn-danger')
-        .html('<span class="glyphicon glyphicon-minus"></span>');
-    }).on('click', '.btn-remove', function(e)
-    {
-      $(this).parents().parents('.entry:first').remove();
-
-		e.preventDefault();
-		return false;
-	});
-});
+// $(function()
+// {
+//     $(document).on('click', '.btn-plus', function(e)
+//     {
+//         e.preventDefault();
+//         var controlForm = $('.bapak:last'),
+//             currentEntry = $(this).parents().parents('.entry:first'),
+//             newEntry = $(currentEntry.clone()).appendTo(controlForm);
+//         console.log('controlForm :'+controlForm);
+//         console.log('currentEntry: '+currentEntry);
+//         newEntry.find('input').val('');
+//         controlForm.find('.input-group-addon:not(:first)  .btn-plus').removeClass('btn-plus').addClass('btn-remove')
+//         .removeClass('btn-success')
+//         .addClass('btn-danger')
+//         .html('<span class="glyphicon glyphicon-minus"></span>');
+//     }).on('click', '.btn-remove', function(e)
+//     {
+//       $(this).parents().parents('.entry:first').remove();
+//
+// 		e.preventDefault();
+// 		return false;
+// 	});
+// });
 
 
 </script>

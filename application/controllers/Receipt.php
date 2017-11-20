@@ -18,16 +18,23 @@ class Receipt extends CI_Controller {
 	}
 
 
+	private function change_status($id){
+		$this->db->where('id', $id);
+		$this->db->update('notification', array('status'=>'read'));
+	}
+
   public function index(){
 		$filter_data=array(
-			'r.nik_request'=>$this->input->post('nik_request'),
-			'r.id_request'=>$this->input->post('id_request'),
-			't.title'=>$this->input->post('title'),
-			't.deadline'=>$this->input->post('deadline'),
-			'r.status_user'=>$this->input->post('status_user'),
-			'r.status_pic'=>$this->input->post('status_pic')
+			'r.nik_request'=>$this->input->get('nik_request'),
+			'r.id_request'=>$this->input->get('id_request'),
+			't.title'=>$this->input->get('title'),
+			't.deadline'=>$this->input->get('deadline'),
+			'r.status_user'=>$this->input->get('status_user'),
+			'r.status_pic'=>$this->input->get('status_pic')
 		);
-
+		if($this->input->get('notif')!=''){
+			$this->change_status($this->input->get('notif'));
+		}
 		$nik=$this->session->userdata('nik'); //get nik from session
 		$da=$this->receipt_model->get_all($this->session->userdata('nik'), $filter_data);
 		if($this->input->post('export')=='yes')

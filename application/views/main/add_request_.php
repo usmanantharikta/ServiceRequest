@@ -66,7 +66,7 @@ table th {
       </div> -->
       <!-- Default box -->
       <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-12">
         <div class="box box-primary">
           <div class="box-header with-border">
             <h3 class="box-title">Form Add New Request</h3>
@@ -81,8 +81,8 @@ table th {
           <div class="box-body">
             <!-- <?php echo var_dump($pic)?> -->
             <div class="row">
-              <div class="col-md-12">
-                <form id='add-form'  method="post" enctype="multipart/form-data">
+              <form id='add-form'  method="post" enctype="multipart/form-data">
+                <div class="col-md-6">
                   <input type="hidden" name="nik_request" value="<?php echo $_SESSION['nik'];?>">
                   <div class="form-group">
                     <label>PIC</label>
@@ -134,12 +134,6 @@ table th {
                   <span class="help-block"></span>
                   </div>
                   <!-- /.form-group -->
-                  <div class="form-group">
-                    <label>Task Detail</label>
-                    <textarea name="task_detail" class="textarea" value="sdsfsfddsfd" placeholder="Place some detail about this task here"
-                              style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
-                  </div>
-                  <!-- /.form-group -->
                   <!-- Date -->
                   <div class="form-group">
                     <label>Deadline</label>
@@ -152,6 +146,29 @@ table th {
                     <!-- /.input group -->
                   </div>
                   <!-- /.form group -->
+                  <div class="form-group">
+                    <label>File</label>
+                    <div class="bapak">
+                      <div class="input-group entry">
+                        <div class="input-group-addon" style="padding: 0px 0px;">
+                          <button class="btn btn-success btn-plus">
+                            <i class="fa fa-plus"></i>
+                          </button>
+                        </div>
+                        <input name="file[]"  type="file" placeholder="deadline date" class="form-control pull-right" id="datepicker">
+                      </div>
+                      <!-- /.input group -->
+                    </div>
+                  </div>
+                  <!-- /.form group -->
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Task Detail</label>
+                    <textarea name="task_detail" class="textarea" value="sdsfsfddsfd" placeholder="Place some detail about this task here"
+                              style="width: 100%; height: 280px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+                  </div>
+                  <!-- /.form-group -->
                 </form>
                 <!-- ./end form -->
               </div>
@@ -350,7 +367,7 @@ $(document).ready(function(){
     allowClear: true
   });
   // editor $('.textarea').wysihtml5()
-  $('.textarea').wysihtml5();
+  // $('.textarea').wy  sihtml5();
   // $('.textarea').html('usman antharikta naik');
   //Date picker
   var dateToday = new Date();

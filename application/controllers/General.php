@@ -104,4 +104,25 @@ class General extends CI_Controller {
 				$this->session->sess_destroy();
 				redirect('/login', 'location');
 		}
+
+		public function get_notif(){
+			$this->db->select('*');
+			$this->db->where('nik_receipt', $this->session->userdata('nik'));
+			$this->db->where('status', 'unread');
+			$this->db->from('notification');
+			$query=$this->db->get();
+			$result=$query->result_array();
+			$notif='';
+			if(count($result)>0){
+				foreach ($result as $key ) {
+					$notif.='<li>
+									<a href="'.site_url().'/receipt/?notif='.$key['id'].'&export=&id_request='.$key['request_id'].'">
+										<i class="fa fa-user text-green"></i>'.$this->request_model->get_name($key['nik_request']).' Sent Service Request to you
+									</a>
+								</li>';
+				}
+			}
+			// echo 'notif :'.$notif;
+			echo json_encode(array('all'=>count($result), 'notif'=>$notif));
+		}
 }

@@ -85,7 +85,7 @@
         <div class="box-body">
           <!-- <?php var_dump($filter_data);?> -->
 <!-- form start -->
-<form  id='filter-form' class="form-horizontal" action="<?php echo site_url().'/receipt'?>" method="post">
+<form  id='filter-form' class="form-horizontal" action="<?php echo site_url().'/receipt'?>" method="get">
   <input name="export" type='hidden'>
   <div class="col-lg-6">
     <div class="form-group">
