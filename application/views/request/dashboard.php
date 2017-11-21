@@ -44,12 +44,12 @@
     <section class="content-header">
       <h1>
         Dashboard
-        <small>Control panel</small>
+        <!-- <small>Control panel</small> -->
       </h1>
-      <ol class="breadcrumb">
+      <!-- <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Dashboard</li>
-      </ol>
+      </ol> -->
     </section>
 
     <!-- Main content -->
@@ -60,7 +60,7 @@
           <!-- small box -->
           <div class="small-box bg-aqua">
             <div class="inner">
-              <h3 class='all_request'>calculating..</h3>
+              <h3 class='all_request'>0</h3>
 
               <p>All Request</p>
             </div>
@@ -152,7 +152,7 @@
           <div class="small-box bg-yellow">
             <div class="inner">
               <h3 class="rec-onprogress">0</h3>
-              <p>Request Onprogress</p>
+              <p>Request Onprogress & Unread</p>
             </div>
             <div class="icon">
               <i class="ion ion-load-c"></i>
@@ -243,6 +243,8 @@
 
 <!-- include js assets -->
 <?php $this->load->view('include/js');?>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="<?php echo base_url().'assets/dist/js/pages/dashboard.js'?>"></script>
 <script>
 $(document).ready(function(){
   $(".dashboard").addClass('active');

@@ -210,11 +210,13 @@
             <tbody>
               <?php
               $class='';
+              $dead='-';
               foreach ($list as $key) {
                 //get dataType
                 $deadline=date_create($key['deadline']);
                 $now=date_create(date("Y-m-d"));
                 $day=date_diff($deadline,$now);
+                $dead=$day->days;
                 $button='<a class="btn btn-sm btn-primary" title="Edit" onclick="edit('.$key['id_request'].')"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
                 <a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
                 // echo $day->days;
@@ -222,12 +224,15 @@
                   if($key['status_pic']==''){ //jika masih kosong atau progress
                     if($deadline < $now){ //expire
                       $class='danger';
+                      $dead='-'.$day->days;
+
                     }
                     elseif ($day->days<4&&$day->days>=0) {
                       $class='warning'; //mendekati deadline <3
                     }
                     else{
                       $class='';
+
                     }
                   }
                   elseif ($key['status_pic']=='onprogress') {
@@ -261,7 +266,7 @@
                 <td>'.$key['title'].'</td>
                 <td>'.$key['doc_type'].'</td>
                 <td>'.$key['order_date'].'</td>
-                <td>'.$key['deadline'].'</td>
+                <td>'.$key['deadline'].'<br>('.$dead.' days)</td>
                 <td>'.$key['status_pic'].'</td>
                 <td>'.$key['start_date'].'</td>
                 <td>'.$key['finish_date'].'</td>

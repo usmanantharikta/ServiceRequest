@@ -40,7 +40,7 @@
     <form id="login-form" method="post">
       <div id='user' class="form-group">
         <select id='nik' name="username" class="form-control select2" style="width: 100%;">
-          <option> -----------------------Select Your ID-----------------------</option>
+          <option> ----------------------Select Your ID----------------------</option>
           <?php
             foreach ($pic as $key ) {
               echo '<option value="'.$key['nik'].'">'.$key['nik'].'-'.$key['location'].'-'.$key['division'].'-'.$key['department'].'-'.$key['first_name'].' '.$key['last_name'].'</option>';
@@ -95,7 +95,7 @@
     </div> -->
     <!-- /.social-auth-links -->
 
-    <a href="#">I forgot my password</a><br>
+    <!-- <a href="#">I forgot my password</a><br> -->
     <!-- <a href="register.html" class="text-center">Register a new membership</a> -->
 
   </div>

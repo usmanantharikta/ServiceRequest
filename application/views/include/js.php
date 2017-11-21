@@ -59,9 +59,12 @@
 <script src="<?php echo base_url().'assets/dropzone/dist/dropzone.js'?>"></script>
 <!-- AdminLTE App -->
 <script src="<?php echo base_url().'assets/dist/js/adminlte.min.js'?>"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="<?php echo base_url().'assets/dist/js/pages/dashboard.js'?>"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="<?php echo base_url().'assets/dist/js/demo.js'?>"></script>
 <!-- custom view -->
 <script src="<?php echo base_url().'assets/service-request/custom.js'?>"></script>
+
+<script>
+var a='<?php echo $_SESSION['level']?>';
+console.log("level : "+a);
+</script>

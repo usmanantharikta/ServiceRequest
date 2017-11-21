@@ -45,7 +45,7 @@ table th {
   if ($_SESSION['level']=='directure'|| $_SESSION['level']=='admin') {
     $this->load->view('include/asside_su');
   }
-  if ($_SESSION['level']=='staff'){
+  if ($_SESSION['level']=='staf'){
     $this->load->view('include/asside');
   }
   ?>

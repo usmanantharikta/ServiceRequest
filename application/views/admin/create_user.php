@@ -45,7 +45,7 @@ table th {
   if ($_SESSION['level']=='directure'||$_SESSION['level']=='admin') {
     $this->load->view('include/asside_su');
   }
-  if ($_SESSION['level']=='staff'){
+  if ($_SESSION['level']=='staf'){
     $this->load->view('include/asside');
   }
   ?>
@@ -134,7 +134,7 @@ table th {
                       </div>
                       <select id='level' name="level" class="form-control select2" style="width: 100%;">
                         <!-- <option> -----------------------Select One -----------------------</option> -->
-                        <option value="staff">STAFF</option>
+                        <option value="staf">STAFF</option>
                         <option value="manager">MANAGER</option>
                         <option value="directure">DIRECTURE</option>
                         <option value="admin">ADMIN</option>
