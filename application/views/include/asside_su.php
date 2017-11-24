@@ -28,7 +28,7 @@
       <li style="text-align:center" class="header">MAIN MENU</li>
       <li class=" treeview">
         <a href="#">
-          <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+          <i class="fa fa-dashboard"></i> <span>DASHBOARD</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
           </span>
@@ -68,24 +68,51 @@
       <li class="treeview">
         <a href="#">
           <i class="fa fa-user-circle-o"></i>
+          <span>STATISTIC</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li id='statistic'><a href="<?php echo site_url().'/directure/statistic'?>"><i class="fa fa-circle-o"></i>Status Request Accepted</a></li>
+          <!-- <li><a href="<?php echo site_url().'/general/logout'?>"><i class="fa fa-circle-o"></i> Sign out</a></li> -->
+          <!-- <li><a href="../../index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li> -->
+        </ul>
+      </li>
+      <?php
+      if($_SESSION['level']=='admin'){
+        ?>
+      <li class="treeview">
+        <a href="#">
+          <i class="fa fa-user-circle-o"></i>
+          <span>Admin</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li id='create'><a href="<?php echo site_url().'/admin/create_user'?>"><i class="fa fa-circle-o"></i> Create User</a></li>
+          <li id='reset'><a href="<?php echo site_url().'/admin/reset_password'?>"><i class="fa fa-circle-o"></i> Reset Password</a></li>
+          <li id='add_employ'><a href="<?php echo site_url().'/admin/add_employ'?>"><i class="fa fa-circle-o"></i> Add Employee</a></li>
+          <!-- <li><a href="../../index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li> -->
+        </ul>
+      </li>
+              <?php } ?>
+      <li class="treeview">
+        <a href="#">
+          <i class="fa fa-user-circle-o"></i>
           <span>PROFILE</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
           </span>
         </a>
         <ul class="treeview-menu">
-          <?php
-          if($_SESSION['level']=='admin'){
-            ?>
-          <li id='create'><a href="<?php echo site_url().'/admin/create_user'?>"><i class="fa fa-circle-o"></i> Create User</a></li>
-          <li id='reset'><a href="<?php echo site_url().'/admin/reset_password'?>"><i class="fa fa-circle-o"></i> Reset Password</a></li>
-          <li id='reset'><a href="<?php echo site_url().'/admin/add_employ'?>"><i class="fa fa-circle-o"></i> Add Employee</a></li>
-        <?php } ?>
           <li id='change'><a href="<?php echo site_url().'/general'?>"><i class="fa fa-circle-o"></i> Change Password</a></li>
           <li><a href="<?php echo site_url().'/general/logout'?>"><i class="fa fa-circle-o"></i> Sign out</a></li>
           <!-- <li><a href="../../index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li> -->
         </ul>
       </li>
+
     </ul>
   </section>
   <!-- /.sidebar -->

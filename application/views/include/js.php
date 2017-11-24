@@ -63,8 +63,35 @@
 <script src="<?php echo base_url().'assets/dist/js/demo.js'?>"></script>
 <!-- custom view -->
 <script src="<?php echo base_url().'assets/service-request/custom.js'?>"></script>
-
+<!-- date sore -->
 <script>
-var a='<?php echo $_SESSION['level']?>';
+jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+ "date-uk-pre": function ( a ) {
+   if (a == null || a == "") {
+     return 0;
+   }
+   var ukDatea = a.split('/');
+   return (ukDatea[2] + ukDatea[1] + ukDatea[0]) * 1;
+ },
+
+ "date-uk-asc": function ( a, b ) {
+   return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+ },
+
+ "date-uk-desc": function ( a, b ) {
+   return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+ }
+} );
+</script>
+<?php function level(){
+  if(!isset($_SESSION)) {
+    return $_SESSION['level'];
+  }else{
+    return "notlogin";
+  }
+} ?>
+<script>
+var a='';
+a='<?php level(); ?>';
 console.log("level : "+a);
 </script>

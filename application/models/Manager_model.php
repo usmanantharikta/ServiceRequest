@@ -32,6 +32,7 @@ class Manager_model extends CI_Model {
           }
         }
       }
+      $sql.='order by r.id_request desc';
       $this->db->select($sql,FALSE);
       $query=$this->db->get();
       return $query->result_array();
@@ -61,6 +62,7 @@ class Manager_model extends CI_Model {
           }
         }
       }
+      $sql.=' order by r.id_request desc';
       $this->db->select($sql,FALSE);
       $query=$this->db->get();
       return $query->result_array();
@@ -82,4 +84,36 @@ class Manager_model extends CI_Model {
     return $query->result_array();
   }
 
+
+  public function count_status($nik)
+  {
+    $query=$this->db->query('select nik_receipt, count(status_pic) as "count", status_pic from request where nik_receipt='.$nik.' group by status_pic');
+    return $query->result_array();
+  }
+
+  public function get_nik_same()
+  {
+    $this->db->distinct();
+    $this->db->select('r.nik_receipt');
+    $this->db->from('request r');
+    $this->db->join('employee e','e.nik=r.nik_receipt');
+    $this->db->where('e.division', $this->session->userdata('division'));
+    $query=$this->db->get();
+    $result=$query->result_array();
+    if(count($result)>0){
+      return $result;
+    }else{
+      return "0";
+    }
+  }
+
+  public function get_num($nik, $status){
+    $query=$this->db->query('select count(status_pic) as "count" from request where nik_receipt='.$nik.' and status_pic="'.$status.'" group by status_pic');
+    $result=$query->row();
+    if(isset($result)){
+      return $result->count;
+    }else{
+      return "0";
+    }
+  }
 }

@@ -216,9 +216,12 @@ $(document).ready(function(){
     startDate: dateToday,
   });
 });
+$('button .btn').click(function(event) {
+     event.preventDefault(event);
+});
+
 function change_password(){
          var formdata = new FormData($("#change-form")[0]);
-         event.preventDefault();
         $('.form-group').removeClass('has-error'); // clear error class
         $('.help-block').empty(); // clear error string
            $.ajax({

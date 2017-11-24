@@ -49,7 +49,7 @@ class Request_model extends CI_Model {
     }
 
     public function createNotif($result, $receipt , $request){
-      $this->db->insert('notification', array('nik_receipt'=>$receipt, 'value'=>'New Request', 'status'=>'unread', 'request_id'=>$result, 'nik_request'=>$request));
+      $this->db->insert('notification', array('times'=>Date('Y-m-d h:i:s'),'nik_receipt'=>$receipt, 'value'=>'New Request', 'status'=>'unread', 'request_id'=>$result, 'nik_request'=>$request));
       return $this->db->insert_id();
     }
 
@@ -122,6 +122,7 @@ class Request_model extends CI_Model {
           }
         }
       }
+      $sql.=' order by r.id_request desc';
       $this->db->select($sql,FALSE);
       $query=$this->db->get();
       return $query->result_array();

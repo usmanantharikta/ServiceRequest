@@ -117,7 +117,7 @@
     //Initialize Select2 Elements
     $('.select2').select2();
 
- 	$("#login-form").submit(function()
+ 	$("#login-form").submit(function(event)
        {
          event.preventDefault();
         $('.form-group').removeClass('has-error'); // clear error class

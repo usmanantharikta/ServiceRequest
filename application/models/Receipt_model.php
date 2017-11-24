@@ -40,6 +40,11 @@ class Receipt_model extends CI_Model {
       return $this->db->insert_id();
     }
 
+    public function insert_notif($data){
+  		$this->db->insert('notification',$data);
+      return $this->db->insert_id();
+  	}
+
     public function get_last($id){
       $this->db->select('*');
       $this->db->from('request');
@@ -97,6 +102,8 @@ class Receipt_model extends CI_Model {
           }
         }
       }
+      $sql.=' order by r.id_request desc';
+
       // if(count($filter)>0){
       //   foreach ($filter as $key => $value) {
       //     $sql.='and '.array_keys($filter, $value).'='.$value;

@@ -380,9 +380,13 @@ $(document).ready(function(){
     startDate: dateToday,
   });
 });
+
+$('button .bg-olive').click(function(event) {
+     event.preventDefault(event);
+});
+
 function add_req(){
          var formdata = new FormData($("#add-form")[0]);
-         event.preventDefault();
         $('.form-group').removeClass('has-error'); // clear error class
         $('.help-block').empty(); // clear error string
            $.ajax({

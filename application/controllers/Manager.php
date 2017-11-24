@@ -26,21 +26,31 @@ class Manager extends CI_Controller {
 		$this->load->model('manager_model');
 		$this->load->library('Excel');
 	}
+	private function change_status($id){
+		$this->db->where('id', $id);
+		$this->db->update('notification', array('status'=>'read'));
+	}
 
 	public function index()
 	{
 		$filter_data=array(
-			'r.nik_receipt'=>$this->input->post('nik_receipt'),
-			'r.id_request'=>$this->input->post('id_request'),
-			't.title'=>$this->input->post('title'),
-			't.deadline'=>$this->input->post('deadline'),
-			'r.status_user'=>$this->input->post('status_user'),
-			'r.status_pic'=>$this->input->post('status_pic')
+			'r.nik_receipt'=>$this->input->get('nik_receipt'),
+			'r.id_request'=>$this->input->get('id_request'),
+			't.title'=>$this->input->get('title'),
+			't.deadline'=>$this->input->get('deadline'),
+			'r.status_user'=>$this->input->get('status_user'),
+			'r.status_pic'=>$this->input->get('status_pic')
 		);
+
+		if($this->input->get('notif')!=''){
+			$this->change_status($this->input->get('notif'));
+		}
+
+
 		$nik=$this->session->userdata('nik'); //get nik from session
 		$da=$this->manager_model->get_all_request($this->session->userdata('nik'), $filter_data, $this->session->userdata('division'));
 
-		if($this->input->post('export')=='yes')
+		if($this->input->get('export')=='yes')
 		{
 			$this->exportXlsx($da, $nik, "Request");
 		}else{
@@ -59,10 +69,10 @@ class Manager extends CI_Controller {
 				'order_date'=>$key['order_date'],
 				'deadline'=>$key['deadline'],
 				'status_pic'=>$key['status_pic'],
-				'start_date'=>$key['start_date'],
-				'finish_date'=>$key['finish_date'],
+				'start_date'=>date("d/m/Y", strtotime($key['start_date'])),
+				'finish_date'=>date("d/m/Y", strtotime($key['finish_date'])),
 				'status_user'=>$key['status_user'],
-				'close_date'=>$key['close_date'],
+				'close_date'=>date("d/m/Y", strtotime($key['close_date'])),
 				'transfer_from'=>$key['transfer_from'],
 				'id_request'=>$key['id_request'],
 				));
@@ -206,17 +216,22 @@ class Manager extends CI_Controller {
 
 	public function receipt(){
 		$filter_data=array(
-			'r.nik_receipt'=>$this->input->post('nik_receipt'),
-			'r.id_request'=>$this->input->post('id_request'),
-			't.title'=>$this->input->post('title'),
-			't.deadline'=>$this->input->post('deadline'),
-			'r.status_user'=>$this->input->post('status_user'),
-			'r.status_pic'=>$this->input->post('status_pic')
+			'r.nik_receipt'=>$this->input->get('nik_receipt'),
+			'r.id_request'=>$this->input->get('id_request'),
+			't.title'=>$this->input->get('title'),
+			't.deadline'=>$this->input->get('deadline'),
+			'r.status_user'=>$this->input->get('status_user'),
+			'r.status_pic'=>$this->input->get('status_pic')
 		);
+
+		if($this->input->get('notif')!=''){
+			$this->change_status($this->input->get('notif'));
+		}
+
 		$nik=$this->session->userdata('nik'); //get nik from session
 		$da=$this->manager_model->get_all_receipt($this->session->userdata('nik'), $filter_data,$this->session->userdata('division'));
 
-		if($this->input->post('export')=='yes')
+		if($this->input->get('export')=='yes')
 		{
 			$this->exportXlsx($da, $nik, "Receipt");
 		}else{
@@ -235,10 +250,10 @@ class Manager extends CI_Controller {
 				'order_date'=>$key['order_date'],
 				'deadline'=>$key['deadline'],
 				'status_pic'=>$key['status_pic'],
-				'start_date'=>$key['start_date'],
-				'finish_date'=>$key['finish_date'],
+				'start_date'=>date("d/m/Y", strtotime($key['start_date'])),
+				'finish_date'=>date("d/m/Y", strtotime($key['finish_date'])),
 				'status_user'=>$key['status_user'],
-				'close_date'=>$key['close_date'],
+				'close_date'=>date("d/m/Y", strtotime($key['close_date'])),
 				'transfer_from'=>$key['transfer_from'],
 				'id_request'=>$key['id_request'],
 				));
@@ -255,6 +270,36 @@ class Manager extends CI_Controller {
 		$this->load->view('manager/receipt_view',$data);
 		echo json_encode(array('nik'=>$this->session->userdata('nik')));
 	}
+}
+
+public function statistic(){
+	$this->load->view('manager/statistic');
+}
+
+public function get_nik_same()
+{
+	$niks=$this->manager_model->get_nik_same(); //get niks
+	$table=array(); //save to TokyoTyrantTable
+
+	foreach ($niks as $key ) {
+		array_push($table, array(
+			// 'nik'=>$key['nik_receipt'],
+			// 'name'=>$this->request_model->get_name($key['nik_receipt']),
+			// 'div'=>$this->request_model->get_dept($key['nik_receipt']),
+			// 'solved'=>$this->manager_model->get_num($key['nik_receipt'], 'solved'),
+			// 'unsolved'=>$this->manager_model->get_num($key['nik_receipt'], 'unsolved'),
+			// 'onprogress'=>$this->manager_model->get_num($key['nik_receipt'], 'onprogress'),
+			// 'unread'=>$this->manager_model->get_num($key['nik_receipt'], 'unread'),
+			$key['nik_receipt'],
+			$this->request_model->get_name($key['nik_receipt']),
+			$this->request_model->get_dept($key['nik_receipt']),
+			'<a href="'.site_url().'/manager/receipt?export=&nik_receipt='.$key['nik_receipt'].'&id_request=&title=&deadline=&status_user=&status_pic=solved">'.$this->manager_model->get_num($key['nik_receipt'], 'solved').'</a>',
+			'<a href="'.site_url().'/manager/receipt?export=&nik_receipt='.$key['nik_receipt'].'&id_request=&title=&deadline=&status_user=&status_pic=unsolved">'.$this->manager_model->get_num($key['nik_receipt'], 'unsolved').'</a>',
+			'<a href="'.site_url().'/manager/receipt?export=&nik_receipt='.$key['nik_receipt'].'&id_request=&title=&deadline=&status_user=&status_pic=onprogress">'.$this->manager_model->get_num($key['nik_receipt'], 'onprogress').'</a>',
+			'<a href="'.site_url().'/manager/receipt?export=&nik_receipt='.$key['nik_receipt'].'&id_request=&title=&deadline=&status_user=&status_pic=unread">'.$this->manager_model->get_num($key['nik_receipt'], 'unread').'</a>',
+		));
+	}
+	echo json_encode(array('data'=>$table));
 }
 
 

@@ -28,7 +28,7 @@
       <li style="text-align:center" class="header">MAIN MENU</li>
       <li class=" treeview">
         <a href="#">
-          <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+          <i class="fa fa-dashboard"></i> <span>DASHBOARD</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
           </span>

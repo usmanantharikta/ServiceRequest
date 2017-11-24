@@ -37,7 +37,7 @@ class Receipt extends CI_Controller {
 		}
 		$nik=$this->session->userdata('nik'); //get nik from session
 		$da=$this->receipt_model->get_all($this->session->userdata('nik'), $filter_data);
-		if($this->input->post('export')=='yes')
+		if($this->input->get('export')=='yes')
 		{
 				$this->exportXlsx($da, $nik);
 		}
@@ -59,10 +59,10 @@ class Receipt extends CI_Controller {
 				'order_date'=>$key['order_date'],
 				'deadline'=>$key['deadline'],
 				'status_pic'=>$key['status_pic'],
-				'start_date'=>$key['start_date'],
-				'finish_date'=>$key['finish_date'],
+				'start_date'=>date("d/m/Y", strtotime($key['start_date'])),
+				'finish_date'=>date("d/m/Y", strtotime($key['finish_date'])),
 				'status_user'=>$key['status_user'],
-				'close_date'=>$key['close_date'],
+				'close_date'=>date("d/m/Y", strtotime($key['close_date'])),
 				'transfer_from'=>$key['transfer_from'],
 				'id_request'=>$key['id_request'],
 				));
@@ -79,7 +79,7 @@ class Receipt extends CI_Controller {
   }
 
 
-	public function save_edit(){
+	public function save_editt(){
 		$id_request=$this->input->post('id_request');
 		$status=$this->input->post('status_pic');
 		$close_date=date('Y-m-d');
@@ -90,24 +90,90 @@ class Receipt extends CI_Controller {
 		//cek apakah itu manager atau bukan
 		$transfer_to=$this->input->post('transfer_to');
 		$nik_from=$this->input->post('nik_from');
-		if($transfer_to!=''){
+		if($transfer_to!='0'){ //jika manager
 			$update=$this->manager_model->change_receipt(array('nik_receipt'=>$transfer_to,'transfer_from'=>$nik_from, 'pic_note'=>$pic_note,'status_pic'=>'', 'start_date'=>'0000-00-00', 'finish_date'=>'0000-00-00 00:00:00'),array('id_request'=>$id_request));
 			$log=$this->receipt_model->save_log(array('request_id'=>$id_request), array('transfer-time'=>date('Y-m-d H:i:s'),'start_time'=>'0000-00-00 00:00:00', 'unsoved_time'=>'0000-00-00 00:00:00'));
-		}else{
+		}else{ //jika tidak
 			if($status=='solved'){
 				// $update=$this->request_model->update_request(array('id_request'=>$id_request), array('status_pic'=>$status, 'finish_date'=>$close_date, 'pic_note'=>$pic_note));
 				$log=$this->receipt_model->save_log(array('request_id'=>$id_request), array('solved_time'=>date('Y-m-d H:i:s')));
+				$this->receipt_model->insert_notif(array('nik_receipt'=>$this->input->post('nik_request'), 'value'=>'Solved', 'status'=>'unread', 'request_id'=>$this->input->post('id_request'), 'nik_request'=>$this->session->userdata('nik')));
 			}elseif ($status=='onprogress') {
 				// $update=$this->request_model->update_request(array('id_request'=>$id_request), array('status_pic'=>$status, 'start_date'=>$close_date, 'pic_note'=>$pic_note));
 				$log=$this->receipt_model->save_log(array('request_id'=>$id_request), array('start_time'=>date('Y-m-d H:i:s')));
 			}elseif ($status=='unsolved') {
 				// $update=$this->request_model->update_request(array('id_request'=>$id_request), array('status_pic'=>$status, 'finish_date'=>$close_date, 'pic_note'=>$pic_note));
 				$log=$this->receipt_model->save_log(array('request_id'=>$id_request), array('unsoved_time'=>date('Y-m-d H:i:s')));
+				$this->receipt_model->insert_notif(array('nik_receipt'=>$this->input->post('nik_request'), 'value'=>'Unsolved', 'status'=>'unread', 'request_id'=>$this->input->post('id_request'), 'nik_request'=>$this->session->userdata('nik')));
 			}
 
 			$update=$this->request_model->update_request(array('id_request'=>$id_request), array('status_pic'=>$status,'start_date'=>$start_date, 'finish_date'=>$finish_date, 'pic_note'=>$pic_note));
 		}
-		echo json_encode(array('status'=>true));
+		echo json_encode(array('status'=>true, 'nik_sender'));
+	}
+
+	//save edit from action o receipt view
+	public function save_edit()
+	{
+		//get data from form
+		$id_request=$this->input->post('id_request'); //get id request
+		$status=$this->input->post('status_pic'); // status PIC
+		$close_date=date('Y-m-d'); //define close date for user edit
+		$pic_note=$this->input->post('pic_note'); //note pic if input
+		$start_date=$this->input->post('start_date'); // start date
+		$finish_date=$this->input->post('finish_date'); // finish date
+		$receipt=$this->input->post('receipt'); //penerima request / pengirm notif
+		$sender=$this->input->post('sender'); //pembuat request / penerima notif
+		$transfer_to=$this->input->post('transfer_to');
+		$level=$this->get_level();
+		//cek manager atau bukan
+		if($level!='manager') //jika bukan
+		{
+			// echo $sender;
+			$this->update_insert($status, $id_request, $close_date, $pic_note, $start_date, $finish_date, $receipt, $sender);
+		}
+		else
+		{
+			if($transfer_to!='0'){ //jika manager
+				$update=$this->manager_model->change_receipt(array('nik_receipt'=>$transfer_to,'transfer_from'=>$sender, 'pic_note'=>$pic_note,'status_pic'=>'unread', 'start_date'=>'0000-00-00', 'finish_date'=>'0000-00-00 00:00:00'),array('id_request'=>$id_request));
+				$log=$this->receipt_model->save_log(array('request_id'=>$id_request), array('transfer-time'=>date('Y-m-d H:i:s'),'start_time'=>'0000-00-00 00:00:00', 'unsoved_time'=>'0000-00-00 00:00:00'));
+			}else{
+				$this->update_insert($status, $id_request, $close_date, $pic_note, $start_date, $finish_date, $receipt, $sender);
+			}
+		}
+
+		echo json_encode(array('status'=>true, 'nik_sender'));
+
+	}
+
+	public function get_level()
+	{
+		$this->db->select('*');
+		$this->db->where('nik', $this->session->userdata('nik'));
+		$this->db->from('user');
+		$query=$this->db->get();
+		$result=$query->row();
+		return $result->level;
+	}
+
+	public function update_insert($status, $id_request, $close_date, $pic_note, $start_date, $finish_date, $receipt, $sender)
+	{
+		if($status=='solved'){
+			//insert log
+			$log=$this->receipt_model->save_log(array('request_id'=>$id_request), array('solved_time'=>date('Y-m-d H:i:s')));
+			//insert notif
+			$this->receipt_model->insert_notif(array('times'=>Date('Y-m-d h:i:s'), 'nik_receipt'=>$sender, 'value'=>'Solved', 'status'=>'unread', 'request_id'=>$this->input->post('id_request'), 'nik_request'=>$this->session->userdata('nik')));
+		}elseif ($status=='onprogress') {
+			//insert log
+			$log=$this->receipt_model->save_log(array('request_id'=>$id_request), array('start_time'=>date('Y-m-d H:i:s')));
+		}elseif ($status=='unsolved') {
+			//insert log
+			$log=$this->receipt_model->save_log(array('request_id'=>$id_request), array('unsoved_time'=>date('Y-m-d H:i:s')));
+			//insert notif unsolved
+			$this->receipt_model->insert_notif(array('times'=>Date('Y-m-d h:i:s'), 'nik_receipt'=>$sender, 'value'=>'Unsolved', 'status'=>'unread', 'request_id'=>$this->input->post('id_request'), 'nik_request'=>$this->session->userdata('nik')));
+		}
+		//update request table
+		$update=$this->request_model->update_request(array('id_request'=>$id_request), array('status_pic'=>$status,'start_date'=>$start_date, 'finish_date'=>$finish_date, 'pic_note'=>$pic_note));
 	}
 
 

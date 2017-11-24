@@ -106,6 +106,16 @@ class General extends CI_Controller {
 		}
 
 		public function get_notif(){
+			$controller='';
+			if($_SESSION['level']=='manager'){
+				$controller='manager';
+			}
+			if ($_SESSION['level']=='directure' || $_SESSION['level']=='admin') {
+				$controller='directure';
+			}
+			if ($_SESSION['level']=='staf'){
+				$controller='request';
+			}
 			$this->db->select('*');
 			$this->db->where('nik_receipt', $this->session->userdata('nik'));
 			$this->db->where('status', 'unread');
@@ -115,14 +125,120 @@ class General extends CI_Controller {
 			$notif='';
 			if(count($result)>0){
 				foreach ($result as $key ) {
-					$notif.='<li>
-									<a href="'.site_url().'/receipt/?notif='.$key['id'].'&export=&id_request='.$key['request_id'].'">
-										<i class="fa fa-user text-green"></i>'.$this->request_model->get_name($key['nik_request']).' Sent Service Request to you
-									</a>
-								</li>';
+					if($key['value']!='New Request')
+					{
+						if($key['value']=='Canceled'){
+							if($_SESSION['level']=='staf'){
+								$notif.='<li>
+												<a href="'.site_url().'/receipt/?notif='.$key['id'].'&export=&id_request='.$key['request_id'].'">
+													<i class="fa fa-user text-green"></i>Request ID '.$key['request_id'].' it was '.$key['value'].'
+												</a>
+											</li>';
+							}else{
+								$notif.='<li>
+												<a href="'.site_url().'/'.$controller.'/receipt/?notif='.$key['id'].'&export=&id_request='.$key['request_id'].'">
+													<i class="fa fa-user text-green"></i>Request ID '.$key['request_id'].' it was '.$key['value'].'
+												</a>
+											</li>';
+							}
+						}
+						else { //unsolved
+						$notif.='<li>
+										<a href="'.site_url().'/'.$controller.'/?notif='.$key['id'].'&export=&id_request='.$key['request_id'].'">
+											<i class="fa fa-user text-green"></i> Request ID '.$key['request_id'].' it was '.$key['value'].'
+										</a>
+									</li>';
+						}
+					}
+					else
+					{
+						if($_SESSION['level']=='staf'){
+							$notif.='<li>
+											<a href="'.site_url().'/receipt/?notif='.$key['id'].'&export=&id_request='.$key['request_id'].'">
+												<i class="fa fa-user text-green"></i>'.$this->request_model->get_name($key['nik_request']).' Sent Service Request to you
+											</a>
+										</li>';
+						}else{
+							$notif.='<li>
+											<a href="'.site_url().'/'.$controller.'/receipt/?notif='.$key['id'].'&export=&id_request='.$key['request_id'].'">
+												<i class="fa fa-user text-green"></i>'.$this->request_model->get_name($key['nik_request']).' Sent Service Request to you
+											</a>
+										</li>';
+						}
+					}
 				}
 			}
 			// echo 'notif :'.$notif;
 			echo json_encode(array('all'=>count($result), 'notif'=>$notif));
+		}
+
+		public function activity()
+		{
+			$controller='';
+			if($_SESSION['level']=='manager'){
+				$controller='manager';
+			}
+			if ($_SESSION['level']=='directure' || $_SESSION['level']=='admin') {
+				$controller='directure';
+			}
+			if ($_SESSION['level']=='staf'){
+				$controller='request';
+			}
+
+			$this->db->select('*');
+			$this->db->from('notification n');
+			$this->db->join('request r', 'r.id_request=n.request_id');
+			$this->db->where('n.nik_receipt', $this->session->userdata('nik'));
+			$query=$this->db->get();
+			$result=$query->result_array();
+
+			//create new Array
+			$newArray=array();
+
+			//manipulate Array
+			foreach ($result as $key) {
+				//cek jeni
+				if($key['value']!='New Request')
+				{
+					if($key['value']=='Canceled'){
+						if($_SESSION['level']=='staf'){
+							$link='<a href="'.site_url().'/receipt/?notif='.$key['id'].'&export=&id_request='.$key['request_id'].'">
+												<i class="fa fa-user text-green"></i>Request ID '.$key['request_id'].' it was '.$key['value'].'
+											</a>';
+						}else{
+							$link='<a href="'.site_url().'/'.$controller.'/receipt/?notif='.$key['id'].'&export=&id_request='.$key['request_id'].'">
+												<i class="fa fa-user text-green"></i>Request ID '.$key['request_id'].' it was '.$key['value'].'
+											</a>';
+						}
+					}
+					else { //unsolved
+					$link='<a href="'.site_url().'/'.$controller.'/?notif='.$key['id'].'&export=&id_request='.$key['request_id'].'">
+										<i class="fa fa-user text-green"></i> Request ID '.$key['request_id'].' it was '.$key['value'].'
+									</a>';
+					}
+				}
+				else
+				{
+					if($_SESSION['level']=='staf'){
+						$link='<a href="'.site_url().'/receipt/?notif='.$key['id'].'&export=&id_request='.$key['request_id'].'">
+											<i class="fa fa-user text-green"></i>'.$this->request_model->get_name($key['nik_request']).' Sent Service Request to you
+										</a>';
+					}else{
+						$link='<a href="'.site_url().'/'.$controller.'/receipt/?notif='.$key['id'].'&export=&id_request='.$key['request_id'].'">
+											<i class="fa fa-user text-green"></i>'.$this->request_model->get_name($key['nik_request']).' Sent Service Request to you
+										</a>';
+					}
+				}
+				array_push($newArray, array(
+					$key['times'],
+					$this->request_model->get_name($key['nik_request']).'-'.$this->request_model->get_dept($key['nik_request']),
+					$key['request_id'],
+					$key['value'],
+					$link,
+					$key['status'],
+				));
+			}
+			echo json_encode(array('data'=>$newArray));
+
 		}
 }

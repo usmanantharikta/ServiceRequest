@@ -34,7 +34,7 @@ class Staff extends CI_Controller {
 		$unsolved=array();
 		$data=array();
 		foreach ($status as $key) {
-			if($key['status_pic']==''){
+			if($key['status_pic']=='unread'){
 				array_push($json_status, array(
 					'label'=>'UnRead',
 					'value'=>$key['jumlah']

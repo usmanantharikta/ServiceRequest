@@ -233,9 +233,12 @@ $(document).ready(function(){
     startDate: dateToday,
   });
 });
+$('button .btn').click(function(event) {
+     event.preventDefault(event);
+});
 function create_user(){
          var formdata = new FormData($("#save-form")[0]);
-         event.preventDefault();
+        //  event.preventDefault();
         $('.form-group').removeClass('has-error'); // clear error class
         $('.help-block').empty(); // clear error string
            $.ajax({
@@ -250,9 +253,11 @@ function create_user(){
                  if(data.status){
                    bootbox.alert({
                      title: '<p class="text-success">Success</p>',
-                     message: 'Your request has been sent',
+                     message: 'Success Create User',
+                     callback : function (){
+                       location.reload();
+                     }
                    });
-                   location.reload();
                }else{
                  var pesan="";
                  for (var i = 0; i < data.inputerror.length; i++)

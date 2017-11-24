@@ -82,7 +82,7 @@
             <div class="icon">
               <i class="ion ion-unlocked"></i>
             </div>
-            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            <!-- <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a> -->
           </div>
         </div>
         <!-- ./col -->
@@ -96,7 +96,7 @@
             <div class="icon">
               <i class="ion ion-locked"></i>
             </div>
-            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            <!-- <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a> -->
           </div>
         </div>
         <!-- ./col -->
@@ -111,7 +111,7 @@
             <div class="icon">
               <i class="ion ion-close-circled"></i>
             </div>
-            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            <!-- <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a> -->
           </div>
         </div>
         <!-- ./col -->
@@ -128,7 +128,7 @@
             <div class="icon">
               <i class="ion ion-clipboard"></i>
             </div>
-            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            <!-- <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a> -->
           </div>
         </div>
         <!-- ./col -->
@@ -143,7 +143,7 @@
             <div class="icon">
               <i class="ion ion-checkmark-round"></i>
             </div>
-            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            <!-- <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a> -->
           </div>
         </div>
         <!-- ./col -->
@@ -157,7 +157,7 @@
             <div class="icon">
               <i class="ion ion-load-c"></i>
             </div>
-            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            <!-- <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a> -->
           </div>
         </div>
         <!-- ./col -->
@@ -172,7 +172,7 @@
             <div class="icon">
               <i class="ion ion-minus-circled "></i>
             </div>
-            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            <!-- <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a> -->
           </div>
         </div>
         <!-- ./col -->
@@ -188,7 +188,7 @@
             <!-- Tabs within a box -->
             <ul class="nav nav-tabs pull-right">
               <!-- <li><a href="#revenue-chart" data-toggle="tab">Area</a></li> -->
-              <li class="active" ><a href="#sales-chart" data-toggle="tab">Donut</a></li>
+              <li class="active" ><a href="#sales-chart" data-toggle="tab"></a></li>
               <li class="pull-left header"><i class="fa fa-inbox"></i> Status Request</li>
             </ul>
             <div class="tab-content no-padding">
@@ -207,7 +207,7 @@
             <!-- Tabs within a box -->
             <ul class="nav nav-tabs pull-right">
               <!-- <li><a href="#sum-receipt-chart" data-toggle="tab">Area</a></li> -->
-              <li class="active" ><a href="#status-chart" data-toggle="tab">Donut</a></li>
+              <li class="active" ><a href="#status-chart" data-toggle="tab"></a></li>
               <li class="pull-left header"><i class="fa fa-inbox"></i> Status Receipt</li>
             </ul>
             <div class="tab-content no-padding">
@@ -221,17 +221,54 @@
       </div>
       <!-- /.row (main row) -->
 
+      <!-- TO DO List -->
+      <div class="box box-primary">
+        <div class="box-header">
+          <i class="ion ion-clipboard"></i>
+
+          <h3 class="box-title">Task Tracking</h3>
+
+          <div class="box-tools pull-right">
+            <!-- <ul class="pagination pagination-sm inline">
+              <li><a href="#">&laquo;</a></li>
+              <li><a href="#">1</a></li>
+              <li><a href="#">2</a></li>
+              <li><a href="#">3</a></li>
+              <li><a href="#">&raquo;</a></li>
+            </ul> -->
+          </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <!-- See dist/js/pages/dashboard.js to activate the todoList plugin -->
+          <table id="table_activity" class="table table-hover table-bordered">
+            <thead >
+              <tr>
+                <th>Times</th>
+                <th>Name PIC</th>
+                <th>Request ID</th>
+                <th>Type</th>
+                <th>Message</th>
+                <th>Status</th>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer clearfix no-border">
+          <!-- <button type="button" class="btn btn-default pull-right"><i class="fa fa-plus"></i> Add item</button> -->
+        </div>
+      </div>
+      <!-- /.box -->
+
     </section>
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-  <footer class="main-footer">
-    <div class="pull-right hidden-xs">
-      <b>Version</b> 2.4.0
-    </div>
-    <strong>Copyright &copy; 2014-2016 <a href="https://adminlte.io">Almsaeed Studio</a>.</strong> All rights
-    reserved.
-  </footer>
+<?php
+$this->load->view('include/footer');
+?>
 
   <!-- Control Sidebar -->
   <!-- /.control-sidebar -->
@@ -249,8 +286,19 @@
 $(document).ready(function(){
   $(".dashboard").addClass('active');
   $(".dashboard").parent().parent().addClass('active menu-open');
-});
 
+  var url='<?php echo site_url().'/general/activity'?>';
+  $table=$('#table_activity').DataTable( {
+  "ajax":
+  {
+      "url": url,
+      "type": "POST",
+      "retrieve": true,
+      keys: true,
+  },
+  });
+
+});
 </script>
 </body>
 </html>

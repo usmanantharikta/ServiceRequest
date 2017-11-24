@@ -84,7 +84,7 @@
         <div class="box-body">
           <!-- <?php var_dump($filter_data);?> -->
 <!-- form start -->
-<form  id='filter-form' class="form-horizontal" action="<?php echo site_url().'/directure'?>" method="post">
+<form  id='filter-form' class="form-horizontal" action="<?php echo site_url().'/directure'?>" method="get">
   <input name="export" type='hidden'>
   <div class="col-lg-6">
     <div class="form-group">
@@ -176,8 +176,22 @@
               <i class="fa fa-times"></i></button>
           </div>
         </div>
+
         <div class="box-body table-responsive">
           <!-- <button class="btn btn-primary" onclick="reload_table()">Reload</button> -->
+          <h3>Toggle Column View</h3>
+          <div class="btn-group">
+            <button class="toggle-vis btn btn-flat btn-info" data-column='0'>NIK User</button>
+            <button class="toggle-vis btn btn-flat btn-info" data-column='1'>Name User</button>
+            <button class="toggle-vis btn btn-flat btn-info" data-column='2'>Division User</button>
+            <button class="toggle-vis btn btn-flat btn-info" data-column='3'>NIK PIC</button>
+            <button class="toggle-vis btn btn-flat btn-info" data-column='4'>Name PIC</button>
+            <button class="toggle-vis btn btn-flat btn-info" data-column=''>Division PIC</button>
+            <button class="toggle-vis btn btn-flat btn-info" data-column='8'>Doc Type</button>
+            <button class="toggle-vis btn btn-flat btn-info" data-column='16'>Transfer From</button>
+          </div>
+        </br>
+        <br>
           <table id="table_report" class="table table-hover table-bordered">
             <thead >
               <tr style="text-align: center">
@@ -213,6 +227,7 @@
               foreach ($list as $key) {
                 //get dataType
                 $deadline=date_create($key['deadline']);
+                $finihsDate=date_create($key['finish_date']);
                 $now=date_create(date("Y-m-d"));
                 $day=date_diff($deadline,$now);
                 $button='<a class="btn btn-sm btn-primary" title="Edit" onclick="edit('.$key['id_request'].')"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
@@ -222,9 +237,13 @@
                   $button='<a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
                 }
                 if($key['status_user']=='OPEN'){ //jika user open dan status pic masih kosong , waktu telah mendekati deadline
-                  if($key['status_pic']==''){ //jika masih kosong atau progress
+                  $sUser='<i class="fa fa-circle text-primary"></i>'; //kuning unread
+
+                  if($key['status_pic']=='unread'){ //jika masih kosong atau progress
+                    $sPic='<i class="fa fa-circle text-warning"></i>'; //kuning unread
                     if($deadline < $now){ //expire
                       $class='danger';
+                      $dead='-';
                     }
                     elseif ($day->days<4&&$day->days>=0) {
                       $class='warning'; //mendekati deadline <3
@@ -234,30 +253,74 @@
                     }
                   }
                   elseif ($key['status_pic']=='onprogress') {
+                    $sPic='<i class="fa fa-circle text-primary"></i>'; //kuning unread
                     $class='info';
                   }
                   elseif($key['status_pic']=='solved'){
+                    $sPic='<i class="fa fa-circle text-success"></i>'; //kuning unread
+                    if($deadline < $finihsDate){ //expire
+                      $class='danger';
+                    }else{
                     $class='success';
+                    }
                   }
                   else{
+                    $sPic='<i class="fa fa-circle text-danger"></i>'; //kuning unread
                     $class='danger';
                   }
                 }
                 elseif ($key['status_user']=='CLOSE') {
+                  $sUser='<i class="fa fa-circle text-success"></i>'; //kuning unread
+                  if($deadline < $finihsDate){ //expire
+                    $class='danger';
+                  }else{
                   $class='success';
+                  }
                   $button='<a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
+
+                  if($key['status_pic']=='solved'){
+                    $sPic='<i class="fa fa-circle text-success"></i>'; //kuning unread
+                  }elseif ($key['status_pic']=='onprogress') {
+                    $sPic='<i class="fa fa-circle text-primary"></i>'; //kuning unread
+
+                  }
+                  elseif ($key['status_pic']=='unsolved') {
+                    $sPic='<i class="fa fa-circle text-danger"></i>'; //kuning unread
+                    $class='danger';
+
+                  }
+                  else{
+                    $sPic='<i class="fa fa-circle text-warning"></i>'; //kuning unread
+
+                  }
                 }
                 else{
-                  $class='danger';
+                  $sUser='<i class="fa fa-circle text-success"></i>'; //kuning unread
+
+                  $class='success';
                   $button='<a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
+                  if($key['status_pic']=='solved'){
+                    $sPic='<i class="fa fa-circle text-success"></i>'; //kuning unread
+                  }elseif ($key['status_pic']=='onprogress') {
+                    $sPic='<i class="fa fa-circle text-primary"></i>'; //kuning unread
+
+                  }
+                  elseif ($key['status_pic']=='unsolved') {
+                    $sPic='<i class="fa fa-circle text-danger"></i>'; //kuning unread
+
+                  }
+                  else{
+                    $sPic='<i class="fa fa-circle text-warning"></i>'; //kuning unread
+
+                  }
                 }
 
                 echo '
                 <tr class="'.$class.'">
                 <td class="sorting_1">'.$key['nik'].'</td><td>'.$key['full_name'].'</td><td>'.$key['div'].'</td><td>123</td>
-                <td>'.$key['name_pic'].'</td><td>'.$key['div_pic'].'</td><td>'.$key['id_request'].'</td><td>'.$key['title'].'</td><td>'.$key['doc_type'].'</td><td>'.$key['order_date'].'</td>
-                <td>'.$key['deadline'].' ('.$day->days.' days)'.'</td><td>'.$key['status_pic'].'</td><td>'.$key['start_date'].'</td><td>'.$key['finish_date'].'</td>
-                <td>'.$key['status_user'].'</td><td>'.$key['close_date'].'</td><td>'.$key['transfer_from'].'</td>
+                <td>'.$key['name_pic'].'</td><td>'.$key['div_pic'].'</td><td>'.$key['id_request'].'</td><td>'.$key['title'].'</td><td>'.$key['doc_type'].'</td><td>'.date("d/m/Y", strtotime($key['order_date'])).'</td>
+                <td>'.date("d/m/Y", strtotime($key['deadline'])).' ('.$day->days.' days)'.'</td><td>'.$sPic.' '.$key['status_pic'].'</td><td>'.$key['start_date'].'</td><td>'.$key['finish_date'].'</td>
+                <td>'.$sUser.' '.$key['status_user'].'</td><td>'.$key['close_date'].'</td><td>'.$key['transfer_from'].'</td>
                 <td>'.$button.'</td>
                 </tr>';
               }
@@ -301,6 +364,7 @@
           <input type="hidden" name="nik_request" value="<?php echo $_SESSION['nik'];?>">
           <input type="hidden" name="id_request" >
           <input type="hidden" name="id_task" >
+          <input type="hidden" name="nik_rec">
           <div class="form-group">
             <label>PIC</label>
             <div class="input-group ">
@@ -430,7 +494,18 @@ $(document).ready(function(){
   $("#list").parent().parent().addClass('active menu-open');
   // parent().parent().addClass('active');
   var url='<?php echo site_url().'/request/get_all_request/'.$_SESSION['nik']?>';
-  table = $('#table_report').DataTable();
+  table = $('#table_report').DataTable({
+    columnDefs: [
+       { type: 'date-uk', targets: 9 }
+     ],
+    "order": [[ 9, "desc" ]]
+  });
+
+//   for ( var i=0 ; i<4 ; i++ ) {
+//     table.column( i ).visible( false, false );
+//   }
+//
+// table.columns.adjust().draw( false ); // adjust column sizing and redraw
 
   $('[name="status_pic"]').val('<?php echo $filter['r.status_pic']?>');
   $('[name="status_user"]').val('<?php echo $filter['r.status_user']?>');
@@ -477,6 +552,7 @@ function edit(id_request){
           $(".memo").wysihtml5();
            $('[name="id_request"]').val(data.id_request);
            $('[name="id_task"]').val(data.id_task);
+            $('[name="nik_rec"]').val(data.nik_receipt)
            $('[name="nik_receipt"]').val(data.nik_receipt+"-"+data.location+"-"+data.division+"-"+data.department+"-"+data.first_name+" "+data.last_name);
            $('[name="doc_type"]').val(data.doc_type);
            $('[name="title"]').val(data.title);
@@ -496,13 +572,15 @@ function edit(id_request){
        }
    });
 }
+$('button .btn-primary').click(function(event) {
+     event.preventDefault(event);
+});
 
 function save_edit()
 {
   var input_stat=$("#selected_stat").val();
   if(input_stat=='CLOSE'){
-    console.log('status PIC : '+save_status);
-    if(save_status!='solved'){
+    if(save_status=='onprogress' || save_status==''){
       bootbox.alert({
         title: '<p class="text-danger">Error!!</p>',
         message: '<p class="text-danger">You cannot CLOSE this task becuse status PIC is not complete</p>' ,
@@ -510,15 +588,23 @@ function save_edit()
       return 0;
     }
   }
-    if(input_stat==1){
+  if(input_stat=='OPEN' &&status_u=='OPEN'){
       bootbox.alert({
         title: '<p class="text-danger">Error!!</p>',
-        message: '<p class="text-danger">Status cannot empty, Please select One</p>' ,
+        message: '<p class="text-danger">cannot change to OPEN, because this task is already OPEN </p>' ,
       });
       return 0;
-    }
+  }
+  if(input_stat==1){
+    bootbox.alert({
+      title: '<p class="text-danger">Error!!</p>',
+      message: '<p class="text-danger">Status Cannot Empty !!!, Please Select One</p>' ,
+    });
+    $('#stat_pic').parent().parent().addClass('has-error');
+    return;
+  }
         var formdata = new FormData($('#edit-form')[0]);
-         event.preventDefault();
+        //  event.preventDefault();
         $('.form-group').removeClass('has-error'); // clear error class
         $('.help-block').empty(); // clear error string
            $.ajax({

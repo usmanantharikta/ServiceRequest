@@ -79,8 +79,8 @@ table th {
       </div> -->
       <!-- Default box -->
       <div class="row">
-        <div class="col-lg-6">
-        <div class="box box-primary collapsed-box">
+        <div class="col-lg-12">
+        <div class="box box-primary ">
           <div class="box-header with-border">
             <h3 class="box-title">Form Add New Request</h3>
 
@@ -93,7 +93,7 @@ table th {
           </div>
           <div class="box-body">
             <div class="row">
-              <div class="col-md-12">
+              <div class="col-md-6">
                 <form id='save-form'  method="post" enctype="multipart/form-data">
                   <div class="form-group">
                     <label>NIK</label>
@@ -152,30 +152,31 @@ table th {
                         <!-- <option> -----------------------Select One -----------------------</option> -->
                         <option value="Energy">Energy</option>
                         <option value="Chemical">Chemical</option>
-                        <option value="directure">Kebon Jeruk</option>
-                        <option value="admin">Surabaya</option>
+                        <option value="Hyglenic">Hyglenic</option>
+                        <!-- <option value="admin">Surabaya</option> -->
                       </select>
                     </div>
                     <span class="help-block old_password"></span>
                   </div>
                   <!-- /.form-group -->
-                  <div class="form-group">
-                    <label>Department</label>
-                    <div class="input-group ">
-                      <div class="input-group-addon">
-                        <i class="fa fa-map-signs"></i>
-                      </div>
-                      <select  name="department" class="form-control select2" style="width: 100%;">
-                        <!-- <option> -----------------------Select One -----------------------</option> -->
-                        <option value="IT">IT</option>
-                        <option value="Accounting">Accounting</option>
-                        <option value="Production">Production</option>
-                        <option value="Purchasing">Purchasing</option>
-                      </select>
+                </div>
+                <div class="col-md-6">
+                <div class="form-group">
+                  <label>Department</label>
+                  <div class="input-group ">
+                    <div class="input-group-addon">
+                      <i class="fa fa-map-signs"></i>
                     </div>
-                    <span class="help-block old_password"></span>
+                    <select  name="department" class="form-control select2" style="width: 100%;">
+                      <!-- <option> -----------------------Select One -----------------------</option> -->
+                      <option value="IT">IT</option>
+                      <option value="Accounting">Accounting</option>
+                      <option value="Production">Production</option>
+                      <option value="Purchasing">Purchasing</option>
+                    </select>
                   </div>
-
+                  <span class="help-block old_password"></span>
+                </div>
                   <div class="form-group">
                     <label>Phone</label>
                     <div class="input-group ">
@@ -232,7 +233,7 @@ table th {
           </div>
           <!-- /.box-body -->
           <div class="box-footer ">
-            <button type="submit" onclick="save()" class="btn bg-olive">Change</button>
+            <button type="submit" onclick="save()" class="btn bg-olive">Save</button>
             <button onclick="reset()" class="btn btn-warning">Reset</button>
           </div>
           <!-- /.box-footer-->
@@ -242,7 +243,7 @@ table th {
     <!-- ./col-lg-6 -->
     </div>
     <!-- ./col-lg-12 -->
-    <div class="box box-info">
+    <div class="box box-info ">
       <div class="box-header with-border">
         <h3 class="box-title">List Employee</h3>
         <div class="box-tools pull-right">
@@ -320,8 +321,8 @@ $(document).ready(function(){
   });
 
 
-  $("#create").addClass('active');
-  $("#create").parent().parent().addClass('active menu-open');
+  $("#add_employ").addClass('active');
+  $("#add_employ").parent().parent().addClass('active menu-open');
   // parent().parent().addClass('active');
 
   //Initialize Select2 Elements
@@ -340,9 +341,15 @@ $(document).ready(function(){
     // startDate: dateToday,
   });
 });
+
+$('button .btn').click(function(event) {
+     event.preventDefault(event);
+});
+
+
 function save(){
          var formdata = new FormData($("#save-form")[0]);
-         event.preventDefault();
+        //  event.preventDefault();
         $('.form-group').removeClass('has-error'); // clear error class
         $('.help-block').empty(); // clear error string
            $.ajax({
@@ -357,7 +364,10 @@ function save(){
                  if(data.status){
                    bootbox.alert({
                      title: '<p class="text-success">Success</p>',
-                     message: 'Your request has been sent',
+                     message: 'Add Employ Success',
+                     callback : function (){
+                       $table.ajax.reload();
+                     }
                    });
                    reset();
                }else{

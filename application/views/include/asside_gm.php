@@ -28,7 +28,7 @@
       <li style="text-align:center" class="header">MAIN MENU</li>
       <li class=" treeview">
         <a href="#">
-          <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+          <i class="fa fa-dashboard"></i> <span>DASHBOARD</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
           </span>
@@ -64,6 +64,20 @@
           <li id='receipt_menu'><a href="<?php echo site_url().'/manager/receipt'?>"><i class="fa fa-circle-o"></i> Receipt Task List</a></li>
           <!-- <li><a href="../../index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li> -->
 
+        </ul>
+      </li>
+      <li class="treeview">
+        <a href="#">
+          <i class="fa fa-user-circle-o"></i>
+          <span>STATISTIC</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li id='statistic'><a href="<?php echo site_url().'/manager/statistic'?>"><i class="fa fa-circle-o"></i>Status Request Accepted</a></li>
+          <!-- <li><a href="<?php echo site_url().'/general/logout'?>"><i class="fa fa-circle-o"></i> Sign out</a></li> -->
+          <!-- <li><a href="../../index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li> -->
         </ul>
       </li>
       <li class="treeview">

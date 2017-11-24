@@ -18,19 +18,27 @@ class Request extends CI_Controller {
 
 	}
 
+	private function change_status($id){
+		$this->db->where('id', $id);
+		$this->db->update('notification', array('status'=>'read'));
+	}
+
   public function index(){
 		$nik=$this->session->userdata('nik'); //get nik from session
 		$filter_data=array(
-			'r.nik_receipt'=>$this->input->post('nik_receipt'),
-			'r.id_request'=>$this->input->post('id_request'),
-			't.title'=>$this->input->post('title'),
-			't.deadline'=>$this->input->post('deadline'),
-			'r.status_user'=>$this->input->post('status_user'),
-			'r.status_pic'=>$this->input->post('status_pic')
+			'r.nik_receipt'=>$this->input->get('nik_receipt'),
+			'r.id_request'=>$this->input->get('id_request'),
+			't.title'=>$this->input->get('title'),
+			't.deadline'=>$this->input->get('deadline'),
+			'r.status_user'=>$this->input->get('status_user'),
+			'r.status_pic'=>$this->input->get('status_pic')
 		);
 
+		if($this->input->get('notif')!=''){
+			$this->change_status($this->input->get('notif'));
+		}
 
-		if($this->input->post('export')=='yes')
+		if($this->input->get('export')=='yes')
 		{
 				$this->exportXlsx($filter_data, $nik);
 		}
@@ -52,10 +60,10 @@ class Request extends CI_Controller {
 						'order_date'=>$key['order_date'],
 						'deadline'=>$key['deadline'],
 						'status_pic'=>$key['status_pic'],
-						'start_date'=>$key['start_date'],
-						'finish_date'=>$key['finish_date'],
+						'start_date'=>date("d/m/Y", strtotime($key['start_date'])),
+						'finish_date'=>date("d/m/Y", strtotime($key['finish_date'])),
 						'status_user'=>$key['status_user'],
-						'close_date'=>$key['close_date'],
+						'close_date'=>date("d/m/Y", strtotime($key['close_date'])),
 						'transfer_from'=>$key['transfer_from'],
 						'id_request'=>$key['id_request'],
 						));
@@ -205,7 +213,8 @@ class Request extends CI_Controller {
 			'nik_request'=>$this->input->post('nik_request'),
 			'nik_receipt'=>$this->input->post('nik_receipt'),
 			'order_date'=>date("Y-m-d"),
-			'status_user'=>'OPEN'
+			'status_user'=>'OPEN',
+			'status_pic'=>'unread',
 		);
 		$task=array(
 			'title'=>$this->input->post('title'),
@@ -405,7 +414,11 @@ class Request extends CI_Controller {
 	public function get_link($request, $nik){
 		// $nik=$this->session->userdata('nik');
 		$dir='uploads/request/'.$nik.'/'.$request;
-		$files=scandir($dir);
+		$files=array();
+		// var_dump(is_dir($dir));
+		if (is_dir($dir)) {
+			$files=scandir($dir);
+		 }
 		$link='';
 		for($i=2;$i<count($files);$i++){
 			$link.='<a href="'.base_url().'/'.$dir.'/'.$files[$i].'" download>'.$files[$i].'</a> <br>';
@@ -596,7 +609,7 @@ class Request extends CI_Controller {
 						              <div id="finish-detail" class="timeline-body">
 													<p>Detail Task :</p>
 													'.$data->task_detail.'
-						              <h4>File:  </h4>'.$this->get_link($data->id_request, $data->id_request).'
+						              <h4>File:  </h4>'.$this->get_link($data->id_request, $data->nik_request).'
 						            </div>
 						          </li>
 						          <!-- END timeline item -->
@@ -631,7 +644,7 @@ class Request extends CI_Controller {
 						              <div id="finish-detail" class="timeline-body">
 													<p>Detail Task :</p>
 													'.$data->task_detail.'
-						              <h4>File:  </h4>'.$this->get_link($data->id_request).'
+						              <h4>File:  </h4>'.$this->get_link($data->id_request, $data->nik_request).'
 						            </div>
 						          </li>
 						          <!-- END timeline item -->
@@ -672,6 +685,7 @@ class Request extends CI_Controller {
 		elseif($status=='CANCEL'){
 			$log=$this->receipt_model->save_log(array('request_id'=>$id_request), array('cancel_time'=>date('Y-m-d H:i:s')));
 			$update=$this->request_model->update_request(array('id_request'=>$id_request), array('status_user'=>$status, 'close_date'=>$close_date));
+			$this->receipt_model->insert_notif(array('times'=>Date('Y-m-d h:i:s'),'nik_receipt'=>$this->input->post('nik_rec'), 'value'=>'Canceled', 'status'=>'unread', 'request_id'=>$this->input->post('id_request'), 'nik_request'=>$this->session->userdata('nik')));
 		}
 		echo json_encode(array('status'=>false, 'request_id'=>$id_request, 'hasil'=>$update, array('status_user'=>$status, 'close_date'=>$close_date, 'id_request')));
 	}
