@@ -32,6 +32,12 @@
     text-align: center;
 }
 
+th, td { white-space: nowrap; }
+/*div.dataTables_wrapper {
+    width: 800px;
+    margin: 0 auto;
+}*/
+
 </style>
 <!-- ADD THE CLASS fixed TO GET A FIXED HEADER AND SIDEBAR LAYOUT -->
 <!-- the fixed layout is not compatible with sidebar-mini -->
@@ -134,7 +140,7 @@
         <select name="status_user" class="form-control" style="width: 100%;">
           <option value="">Select One</option>
           <option value="OPEN">OPEN</option>
-          <option value="CANCEL">SOLVED</option>
+          <option value="CANCEL">CANCEL</option>
           <option value="CLOSE">CLOSE</option>
         </select>
       </div>
@@ -146,6 +152,7 @@
         <!-- <input type="text" name="status_pic" class="form-control" id="inputEmail3" placeholder="Status PIC"> -->
         <select name="status_pic" class="form-control " style="width: 100%;">
           <option value="">Select One</option>
+          <option value="unread">UNREAD</option>
           <option value="onprogress">ONPROGRESS</option>
           <option value="solved">SOLVED</option>
           <option value="unsolved">UNSOLVED</option>
@@ -165,7 +172,7 @@
         <!-- /.box-body -->
       </div>
       <!-- Default box -->
-      <div class="box">
+      <div class="box result_view">
         <div class="box-header with-border">
           <h3 class="box-title">View Receipt</h3>
 
@@ -177,9 +184,9 @@
           </div>
         </div>
 
-        <div class="box-body table-responsive">
+        <div class="box-body ">
           <!-- <button class="btn btn-primary" onclick="reload_table()">Reload</button> -->
-          <h3>Toggle Column View</h3>
+          <!-- <h3>Toggle Column View</h3>
           <div class="btn-group">
             <button class="toggle-vis btn btn-flat btn-info" data-column='0'>NIK User</button>
             <button class="toggle-vis btn btn-flat btn-info" data-column='1'>Name User</button>
@@ -190,20 +197,20 @@
             <button class="toggle-vis btn btn-flat btn-info" data-column='8'>Doc Type</button>
             <button class="toggle-vis btn btn-flat btn-info" data-column='16'>Transfer From</button>
           </div>
-        </br>
+        </br> -->
         <br>
           <table id="table_report" class="table table-hover table-bordered">
             <thead >
-              <tr style="text-align: center">
+              <!-- <tr style="text-align: center">
                 <th colspan="3">User</th>
                 <th colspan="3">PIC</th>
                 <th colspan="11">Task Detail</th>
-              </tr>
+              </tr> -->
               <tr>
-                <th>NIk</th>
+                <th>NIk USER</th>
                 <th>Name User</th>
                 <th>Division User </th>
-                <th>NIk</th>
+                <th>NIk PIC</th>
                 <th>Name PIC</th>
                 <th>Division PIC</th>
                 <!-- task detail  -->
@@ -212,12 +219,12 @@
                 <th> Doc Type</th>
                 <th>Order Date</th>
                 <th>Deadline</th>
-                <th>Status PIC</th>
+                <th>Transfer From</th>
                 <th>Start Date</th>
                 <th>Finish Date</th>
-                <th>Status User</th>
                 <th>Close Date</th>
-                <th>Transfer From</th>
+                <th>Status User</th>
+                <th>Status PIC</th>
                 <th>Action </th>
               </tr>
             </thead>
@@ -227,9 +234,10 @@
               foreach ($list as $key) {
                 //get dataType
                 $deadline=date_create($key['deadline']);
-                $finihsDate=date_create($key['finish_date']);
+                $finish=date_create($key['finish_date']);
                 $now=date_create(date("Y-m-d"));
                 $day=date_diff($deadline,$now);
+                $dead=$day->days;
                 $button='<a class="btn btn-sm btn-primary" title="Edit" onclick="edit('.$key['id_request'].')"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
                 <a class="btn btn-sm btn-info" title="Edit" onclick="show('.$key['id_request'].')"><i class="fa fa fa-info-circle"></i> More</a>';
                 // echo $day->days;
@@ -243,7 +251,7 @@
                     $sPic='<i class="fa fa-circle text-warning"></i>'; //kuning unread
                     if($deadline < $now){ //expire
                       $class='danger';
-                      $dead='-';
+                      $dead='-'.$day->days;
                     }
                     elseif ($day->days<4&&$day->days>=0) {
                       $class='warning'; //mendekati deadline <3
@@ -254,11 +262,21 @@
                   }
                   elseif ($key['status_pic']=='onprogress') {
                     $sPic='<i class="fa fa-circle text-primary"></i>'; //kuning unread
-                    $class='info';
+                    if($deadline < $now){ //expire
+                      $class='danger';
+                      $dead='-'.$day->days;
+                    }
+                    elseif ($day->days<4&&$day->days>=0) {
+                      $class='warning'; //mendekati deadline <3
+                    }
+                    else{
+                      $class='info';
+                    }
                   }
                   elseif($key['status_pic']=='solved'){
                     $sPic='<i class="fa fa-circle text-success"></i>'; //kuning unread
-                    if($deadline < $finihsDate){ //expire
+                    if(strtotime($key['deadline']) < strtotime($key['finish_date'])){ //expire
+                      $dead='-'.$day->days;
                       $class='danger';
                     }else{
                     $class='success';
@@ -271,7 +289,8 @@
                 }
                 elseif ($key['status_user']=='CLOSE') {
                   $sUser='<i class="fa fa-circle text-success"></i>'; //kuning unread
-                  if($deadline < $finihsDate){ //expire
+                  if($deadline < $finish){ //expire
+                    $dead='-'.date_diff($deadline, $finish)->days;
                     $class='danger';
                   }else{
                   $class='success';
@@ -317,10 +336,23 @@
 
                 echo '
                 <tr class="'.$class.'">
-                <td class="sorting_1">'.$key['nik'].'</td><td>'.$key['full_name'].'</td><td>'.$key['div'].'</td><td>123</td>
-                <td>'.$key['name_pic'].'</td><td>'.$key['div_pic'].'</td><td>'.$key['id_request'].'</td><td>'.$key['title'].'</td><td>'.$key['doc_type'].'</td><td>'.date("d/m/Y", strtotime($key['order_date'])).'</td>
-                <td>'.date("d/m/Y", strtotime($key['deadline'])).' ('.$day->days.' days)'.'</td><td>'.$sPic.' '.$key['status_pic'].'</td><td>'.$key['start_date'].'</td><td>'.$key['finish_date'].'</td>
-                <td>'.$sUser.' '.$key['status_user'].'</td><td>'.$key['close_date'].'</td><td>'.$key['transfer_from'].'</td>
+                <td class="sorting_1">'.$key['nik'].'</td>
+                <td>'.$key['full_name'].'</td>
+                <td>'.$key['div'].'</td>
+                <td>'.$key['nik_receipt'].'</td>
+                <td>'.$key['name_pic'].'</td>
+                <td>'.$key['div_pic'].'</td>
+                <td>'.$key['id_request'].'</td>
+                <td>'.$key['title'].'</td>
+                <td>'.$key['doc_type'].'</td>
+                <td>'.date("d/m/Y", strtotime($key['order_date'])).'</td>
+                <td>'.date("d/m/Y", strtotime($key['deadline'])).' ('.$dead.' days)'.'</td>
+                <td>'.$key['transfer_from'].'</td>
+                <td>'.$key['start_date'].'</td>
+                <td>'.date("d/m/Y", strtotime($key['finish_date'])).'</td>
+                <td>'.$key['close_date'].'</td>
+                <td>'.$sUser.' '.$key['status_user'].'</td>
+                <td>'.$sPic.' '.$key['status_pic'].'</td>
                 <td>'.$button.'</td>
                 </tr>';
               }
@@ -492,13 +524,23 @@ var save_status='';
 $(document).ready(function(){
   $("#list").addClass('active');
   $("#list").parent().parent().addClass('active menu-open');
+  // $(".result_view").focus();
   // parent().parent().addClass('active');
   var url='<?php echo site_url().'/request/get_all_request/'.$_SESSION['nik']?>';
   table = $('#table_report').DataTable({
     columnDefs: [
        { type: 'date-uk', targets: 9 }
      ],
-    "order": [[ 9, "desc" ]]
+    "order": [[ 9, "desc" ]],
+    scrollY:        "600px",
+    scrollX:        true,
+    scrollCollapse: true,
+    // paging:         false,
+    fixedColumns:   {
+        leftColumns: 0,
+        rightColumns: 3
+    }
+
   });
 
 //   for ( var i=0 ; i<4 ; i++ ) {
@@ -580,7 +622,7 @@ function save_edit()
 {
   var input_stat=$("#selected_stat").val();
   if(input_stat=='CLOSE'){
-    if(save_status=='onprogress' || save_status==''){
+    if(save_status=='onprogress' || save_status=='unread'){
       bootbox.alert({
         title: '<p class="text-danger">Error!!</p>',
         message: '<p class="text-danger">You cannot CLOSE this task becuse status PIC is not complete</p>' ,
@@ -660,6 +702,7 @@ function reset_fo()
   $('[name="deadline"]').val('');
   $('[name="status_pic"]').val('');
   $('[name="status_user"]').val('');
+  submit();
 }
 
 function submit()

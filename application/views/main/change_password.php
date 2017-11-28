@@ -237,7 +237,9 @@ function change_password(){
                    bootbox.alert({
                      title: '<p class="text-success">Success</p>',
                      message: 'Your request has been sent',
+                     callback: function(){ $(location).attr('href', '<?php echo site_url().'/general/logout'?>'); }
                    });
+                   
                }else{
                  var pesan="";
                  for (var i = 0; i < data.inputerror.length; i++)

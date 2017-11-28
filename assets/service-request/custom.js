@@ -56,3 +56,7 @@ $('button.toggle-vis').on( 'click', function (e) {
       // Toggle the visibility
       column.visible( ! column.visible() );
   } );
+
+  $('html, body').animate({
+  scrollTop: $("div.box.result_view").offset().top
+  }, 1000);

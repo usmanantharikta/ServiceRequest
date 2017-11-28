@@ -120,6 +120,7 @@ class General extends CI_Controller {
 			$this->db->where('nik_receipt', $this->session->userdata('nik'));
 			$this->db->where('status', 'unread');
 			$this->db->from('notification');
+			$this->db->order_by('id', 'DESC');
 			$query=$this->db->get();
 			$result=$query->result_array();
 			$notif='';
@@ -203,11 +204,11 @@ class General extends CI_Controller {
 					if($key['value']=='Canceled'){
 						if($_SESSION['level']=='staf'){
 							$link='<a href="'.site_url().'/receipt/?notif='.$key['id'].'&export=&id_request='.$key['request_id'].'">
-												<i class="fa fa-user text-green"></i>Request ID '.$key['request_id'].' it was '.$key['value'].'
+												<i class="fa fa-user text-green"></i> Request ID '.$key['request_id'].' it was '.$key['value'].'
 											</a>';
 						}else{
 							$link='<a href="'.site_url().'/'.$controller.'/receipt/?notif='.$key['id'].'&export=&id_request='.$key['request_id'].'">
-												<i class="fa fa-user text-green"></i>Request ID '.$key['request_id'].' it was '.$key['value'].'
+												<i class="fa fa-user text-green"></i> Request ID '.$key['request_id'].' it was '.$key['value'].'
 											</a>';
 						}
 					}
@@ -221,11 +222,11 @@ class General extends CI_Controller {
 				{
 					if($_SESSION['level']=='staf'){
 						$link='<a href="'.site_url().'/receipt/?notif='.$key['id'].'&export=&id_request='.$key['request_id'].'">
-											<i class="fa fa-user text-green"></i>'.$this->request_model->get_name($key['nik_request']).' Sent Service Request to you
+											<i class="fa fa-user text-green"></i> '.$this->request_model->get_name($key['nik_request']).' Sent Service Request to you
 										</a>';
 					}else{
 						$link='<a href="'.site_url().'/'.$controller.'/receipt/?notif='.$key['id'].'&export=&id_request='.$key['request_id'].'">
-											<i class="fa fa-user text-green"></i>'.$this->request_model->get_name($key['nik_request']).' Sent Service Request to you
+											<i class="fa fa-user text-green"></i> '.$this->request_model->get_name($key['nik_request']).' Sent Service Request to you
 										</a>';
 					}
 				}

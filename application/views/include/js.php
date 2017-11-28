@@ -64,6 +64,8 @@
 <!-- custom view -->
 <script src="<?php echo base_url().'assets/service-request/custom.js'?>"></script>
 <!-- date sore -->
+<!-- fixed datetables -->
+<script src="<?php echo base_url().'assets/FixedColumns/js/dataTables.fixedColumns.js'?>"></script>
 <script>
 jQuery.extend( jQuery.fn.dataTableExt.oSort, {
  "date-uk-pre": function ( a ) {

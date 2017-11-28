@@ -60,7 +60,7 @@ class Receipt extends CI_Controller {
 				'deadline'=>$key['deadline'],
 				'status_pic'=>$key['status_pic'],
 				'start_date'=>date("d/m/Y", strtotime($key['start_date'])),
-				'finish_date'=>date("d/m/Y", strtotime($key['finish_date'])),
+				'finish_date'=>$key['finish_date'],
 				'status_user'=>$key['status_user'],
 				'close_date'=>date("d/m/Y", strtotime($key['close_date'])),
 				'transfer_from'=>$key['transfer_from'],

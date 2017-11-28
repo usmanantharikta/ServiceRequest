@@ -176,7 +176,7 @@ table th {
           </div>
           <!-- /.box-body -->
           <div class="box-footer ">
-            <button type="submit" onclick="create_user()" class="btn bg-olive">Change</button>
+            <button type="submit" onclick="create_user()" class="btn bg-olive">Create</button>
             <button onclick="reset()" class="btn btn-warning">Reset</button>
           </div>
           <!-- /.box-footer-->
